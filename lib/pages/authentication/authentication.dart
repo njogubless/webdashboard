@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web_dashboard/constants/style.dart';
-import 'package:flutter_web_dashboard/routing/routes.dart';
-import 'package:flutter_web_dashboard/widgets/custom_text.dart';
+import 'package:webdashboard/constants/style.dart';
+import 'package:webdashboard/routing/routes.dart';
+import 'package:webdashboard/widgets/custom_text.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 

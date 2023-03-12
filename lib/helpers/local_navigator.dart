@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_web_dashboard/constants/controllers.dart';
-import 'package:flutter_web_dashboard/routing/router.dart';
-import 'package:flutter_web_dashboard/routing/routes.dart';
+import 'package:webdashboard/constants/controllers.dart';
+import 'package:webdashboard/routing/router.dart';
+import 'package:webdashboard/routing/routes.dart';
 
 Navigator localNavigator() =>   Navigator(
       key: navigationController.navigatorKey,

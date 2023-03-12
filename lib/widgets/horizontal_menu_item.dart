@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web_dashboard/constants/controllers.dart';
+import 'package:webdashboard/constants/controllers.dart';
 import 'package:get/get.dart';
-import 'package:flutter_web_dashboard/constants/style.dart';
+import 'package:webdashboard/constants/style.dart';
 
 import 'custom_text.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web_dashboard/constants/style.dart';
-import 'package:flutter_web_dashboard/widgets/custom_text.dart';
+import 'package:webdashboard/constants/style.dart';
+import 'package:webdashboard/widgets/custom_text.dart';
 
 class InfoCardSmall extends StatelessWidget {
   final String title;

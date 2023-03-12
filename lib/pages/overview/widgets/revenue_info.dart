@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web_dashboard/constants/style.dart';
+import 'package:webdashboard/constants/style.dart';
 
 class RevenueInfo extends StatelessWidget {
   final String title;

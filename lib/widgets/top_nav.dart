@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web_dashboard/constants/style.dart';
-import 'package:flutter_web_dashboard/helpers/reponsiveness.dart';
+import 'package:webdashboard/constants/style.dart';
+import 'package:webdashboard/helpers/reponsiveness.dart';
 
 import 'custom_text.dart';
 

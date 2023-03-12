@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web_dashboard/helpers/local_navigator.dart';
-import 'package:flutter_web_dashboard/helpers/reponsiveness.dart';
-import 'package:flutter_web_dashboard/widgets/large_screen.dart';
-import 'package:flutter_web_dashboard/widgets/side_menu.dart';
+import 'package:webdashboard/helpers/local_navigator.dart';
+import 'package:webdashboard/helpers/reponsiveness.dart';
+import 'package:webdashboard/widgets/large_screen.dart';
+import 'package:webdashboard/widgets/side_menu.dart';
 
 import 'widgets/top_nav.dart';
 

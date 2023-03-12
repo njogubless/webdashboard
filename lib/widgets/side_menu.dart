@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web_dashboard/constants/controllers.dart';
-import 'package:flutter_web_dashboard/constants/style.dart';
-import 'package:flutter_web_dashboard/helpers/reponsiveness.dart';
-import 'package:flutter_web_dashboard/routing/routes.dart';
-import 'package:flutter_web_dashboard/widgets/custom_text.dart';
-import 'package:flutter_web_dashboard/widgets/side_menu_item.dart';
+import 'package:webdashboard/constants/controllers.dart';
+import 'package:webdashboard/constants/style.dart';
+import 'package:webdashboard/helpers/reponsiveness.dart';
+import 'package:webdashboard/routing/routes.dart';
+import 'package:webdashboard/widgets/custom_text.dart';
+import 'package:webdashboard/widgets/side_menu_item.dart';
 import 'package:get/get.dart';
 
 class SideMenu extends StatelessWidget {
