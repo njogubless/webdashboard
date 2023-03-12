@@ -3,11 +3,8 @@ import 'package:webdashboard/constants/controllers.dart';
 import 'package:webdashboard/routing/router.dart';
 import 'package:webdashboard/routing/routes.dart';
 
-Navigator localNavigator() =>   Navigator(
+Navigator localNavigator() => Navigator(
       key: navigationController.navigatorKey,
       onGenerateRoute: generateRoute,
       initialRoute: overviewPageRoute,
     );
-
-
-

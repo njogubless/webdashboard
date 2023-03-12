@@ -12,9 +12,11 @@ import 'package:get/get.dart';
 import 'widgets/revenue_section_small.dart';
 
 class OverviewPage extends StatelessWidget {
+  const OverviewPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       child: Column(
         children: [
           Obx(
@@ -37,18 +39,16 @@ class OverviewPage extends StatelessWidget {
               if (ResponsiveWidget.isLargeScreen(context) ||
                   ResponsiveWidget.isMediumScreen(context))
                 if (ResponsiveWidget.isCustomSize(context))
-                  OverviewCardsMediumScreen()
+                  const OverviewCardsMediumScreen()
                 else
-                  OverviewCardsLargeScreen()
+                  const OverviewCardsLargeScreen()
               else
-                OverviewCardsSmallScreen(),
+                const OverviewCardsSmallScreen(),
               if (!ResponsiveWidget.isSmallScreen(context))
-                RevenueSectionLarge()
+                const RevenueSectionLarge()
               else
-                RevenueSectionSmall(),
-
-                AvailableDriversTable(),
-             
+                const RevenueSectionSmall(),
+              const AvailableDriversTable(),
             ],
           ))
         ],

@@ -5,7 +5,8 @@ class RevenueInfo extends StatelessWidget {
   final String title;
   final String amount;
 
-  const RevenueInfo({Key key, this.title, this.amount}) : super(key: key);
+  const RevenueInfo({Key? key, required this.title, required this.amount})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,8 @@ class RevenueInfo extends StatelessWidget {
                 style: TextStyle(color: lightGrey, fontSize: 16)),
             TextSpan(
                 text: "\$ $amount",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           ])),
     );
   }

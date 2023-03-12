@@ -6,10 +6,16 @@ class InfoCard extends StatelessWidget {
   final String value;
   final Color topColor;
   final bool isActive;
-  final Function onTap;
+  final VoidCallback onTap;
 
-  const InfoCard({Key key,@required this.title,@required this.value, this.isActive = false,@required this.onTap, this.topColor})
-      : super(key: key);
+  const InfoCard({
+    Key? key,
+    required this.title,
+    required this.value,
+    this.isActive = false,
+    required this.onTap,
+    this.topColor = const Color(0xFF3C19C0),
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +29,9 @@ class InfoCard extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                offset: Offset(0, 6),
-                color: lightGrey.withOpacity(.1),
-                blurRadius: 12
-              )
+                  offset: const Offset(0, 6),
+                  color: lightGrey.withOpacity(.1),
+                  blurRadius: 12)
             ],
             borderRadius: BorderRadius.circular(8),
           ),
@@ -34,8 +39,9 @@ class InfoCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Expanded(child: Container(
-                    color: topColor ?? active,
+                  Expanded(
+                      child: Container(
+                    color: topColor,
                     height: 5,
                   ))
                 ],
@@ -47,14 +53,14 @@ class InfoCard extends StatelessWidget {
                     TextSpan(
                         text: "$title\n",
                         style: TextStyle(
-                            fontSize: 16, color: isActive ? active : lightGrey)),
+                            fontSize: 16,
+                            color: isActive ? active : lightGrey)),
                     TextSpan(
-                        text: "$value",
-                        style:
-                            TextStyle(fontSize: 40, color: isActive ? active : dark)),
+                        text: value,
+                        style: TextStyle(
+                            fontSize: 40, color: isActive ? active : dark)),
                   ])),
               Expanded(child: Container()),
-
             ],
           ),
         ),

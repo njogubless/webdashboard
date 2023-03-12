@@ -7,13 +7,13 @@ import 'custom_text.dart';
 
 class VertticalMenuItem extends StatelessWidget {
   final String itemName;
-  final Function onTap;
-  const VertticalMenuItem({Key key, this.itemName, this.onTap})
+  final VoidCallback onTap;
+  const VertticalMenuItem(
+      {Key? key, required this.itemName, required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return InkWell(
         onTap: onTap,
         onHover: (value) {
@@ -40,7 +40,7 @@ class VertticalMenuItem extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
