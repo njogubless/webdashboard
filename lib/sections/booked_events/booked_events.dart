@@ -5,14 +5,25 @@ class BookedEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: SingleChildScrollView(
+    return Row(children: [
+      Padding(
+        padding: const EdgeInsets.only(top: 20, left: 50),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
-            Text('Booked Events'),
+            Text(
+              'Booked Events',
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: 50,
+              ),
+            ),
+            SizedBox(height: 30),
+            
           ],
         ),
       ),
-    );
+    ]);
   }
 }
