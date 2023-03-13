@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/event.dart';
 
-class ManageEvents extends StatefulWidget {
-  const ManageEvents({super.key});
+class AddEvents extends StatefulWidget {
+  const AddEvents({super.key});
 
   @override
-  State<ManageEvents> createState() => _ManageEventsState();
+  State<AddEvents> createState() => _AddEventsState();
 }
 
-class _ManageEventsState extends State<ManageEvents> {
+class _AddEventsState extends State<AddEvents> {
   final _formkey = GlobalKey<FormState>();
   final _eventNameController = TextEditingController();
   final _eventDateController = TextEditingController();

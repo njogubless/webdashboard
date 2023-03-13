@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hikers_dash/sections/booked_events/booked_events.dart';
 import 'package:hikers_dash/sections/add_events/add_events.dart';
+import 'package:hikers_dash/sections/manage_events/manage_events.dart';
 import 'package:hikers_dash/sections/verify_users/verify_users.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -24,8 +25,10 @@ class _MyHomePageState extends State<MyHomePage> {
       case 1:
         return const VerifyUsers();
       case 2:
-        return const ManageEvents();
+        return const AddEvents();
       case 3:
+        return const ManageEvents();
+      case 4:
         return const BookedEvents();
       default:
         return const Center(
@@ -58,6 +61,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 icon: Icon(Icons.verified_user_outlined),
                 selectedIcon: Icon(Icons.verified_user),
                 label: Text('Verify user'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.event_note_outlined),
+                selectedIcon: Icon(Icons.event_note),
+                label: Text('Add Events'),
               ),
               NavigationRailDestination(
                 icon: Icon(Icons.event_note_outlined),
