@@ -1,1 +1,0 @@
-library inventory_widgets;
