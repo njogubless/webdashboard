@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/booking.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BookedEvents extends StatelessWidget {
   const BookedEvents({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      Padding(
+    return SizedBox(
+      height: 600,
+      width: 500,
+      child: Padding(
         padding: const EdgeInsets.only(top: 20, left: 50),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             const Text(
               'Booked Events',
@@ -27,15 +30,20 @@ class BookedEvents extends StatelessWidget {
               initialData: const [],
               builder: (context, snapshot) {
                 final events = snapshot.data;
-                return ListView.builder(itemBuilder: (context, index) {
-                  return BookedEvent(event: events![index]);
-                });
+                return SizedBox(
+                  height: 400,
+                  child: ListView.builder(
+                      itemCount: events!.length,
+                      itemBuilder: (context, index) {
+                        return BookedEvent(event: events[index]);
+                      }),
+                );
               },
             ),
           ],
         ),
       ),
-    ]);
+    );
   }
 }
 
@@ -50,24 +58,41 @@ class BookedEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      trailing: IconButton(
+          onPressed: () {
+            final Uri emailLaunchUri = Uri(
+              scheme: 'mailto',
+              path: event.userEmail,
+              query: encodeQueryParameters(<String, String>{
+                'subject': 'RE: ${event.eventName}',
+              }),
+            );
+
+            launchUrl(emailLaunchUri);
+          },
+          icon: const Icon(
+            Icons.email,
+            color: Colors.blue,
+          )),
       title: Text(
-        event.eventName,
+        event.userEmail,
         style: const TextStyle(
           fontWeight: FontWeight.w900,
-          fontSize: 30,
+          fontSize: 20,
         ),
       ),
       subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            event.userEmail,
+            event.eventName,
             style: const TextStyle(
               fontWeight: FontWeight.w300,
               fontSize: 20,
             ),
           ),
           Text(
-            'Booking date: ${event.bookingDate}',
+            'Booking date: ${event.bookingDate.substring(0, 10)}',
             style: const TextStyle(
               fontWeight: FontWeight.w300,
               fontSize: 20,
@@ -76,5 +101,12 @@ class BookedEvent extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String? encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((MapEntry<String, String> e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
   }
 }
