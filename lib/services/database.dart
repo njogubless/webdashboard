@@ -44,6 +44,12 @@ class Database {
         .toList();
   }
 
+  // Create event
+  static Future<void> createEvent(Event event) async {
+    final DocumentReference docRef = firestore.collection('events').doc();
+    await docRef.set(event.toJson());
+  }
+
   // Retrieve pending clients
   static Future<List<Client>> getPendingClients() async {
     final QuerySnapshot querySnapshot = await firestore
