@@ -44,7 +44,7 @@ class Database {
         .toList();
   }
 
-  // Retrieve a booked events
+  // Retrieve pending clients
   static Future<List<Client>> getPendingClients() async {
     final QuerySnapshot querySnapshot = await firestore
         .collection('clients')
@@ -54,5 +54,15 @@ class Database {
     return docs
         .map((doc) => Client.fromJson(doc.data() as Map<String, dynamic>))
         .toList();
+  }
+
+  // Retrieve pending clients
+  static Future<void> verifyser(Client client) async {
+    final QuerySnapshot querySnapshot = await firestore
+        .collection('clients')
+        .where('verified', isEqualTo: false)
+        .where('clientEmail', isEqualTo: client.clientEmail)
+        .get();
+    await querySnapshot.docs.first.reference.update({'verified': true});
   }
 }
