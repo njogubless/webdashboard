@@ -92,7 +92,7 @@ class BookedEvent extends StatelessWidget {
             ),
           ),
           Text(
-            'Booking date: ${event.bookingDate.substring(0, 10)}',
+            'Booked on: ${event.bookingDate.substring(0, 10)}',
             style: const TextStyle(
               fontWeight: FontWeight.w300,
               fontSize: 20,
