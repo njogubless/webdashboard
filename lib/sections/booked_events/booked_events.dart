@@ -9,7 +9,7 @@ class BookedEvents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 600,
+      height: MediaQuery.of(context).size.height,
       width: 500,
       child: Padding(
         padding: const EdgeInsets.only(top: 20, left: 50),
