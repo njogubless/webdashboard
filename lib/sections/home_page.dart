@@ -3,6 +3,7 @@ import 'package:hikers_dash/sections/booked_events/booked_events.dart';
 import 'package:hikers_dash/sections/add_events/add_events.dart';
 import 'package:hikers_dash/sections/manage_events/manage_events.dart';
 import 'package:hikers_dash/sections/verify_users/verify_users.dart';
+import 'package:hikers_dash/sections/welcome/welcome.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -16,12 +17,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
+  void switchToSection(int index) => setState(() {
+        _selectedIndex = index;
+      });
+
   Widget _showSection(int index) {
     switch (index) {
       case 0:
-        return const Center(
-          child: Text('Home'),
-        );
+        return WelcomeSection(switchPage: switchToSection);
       case 1:
         return const VerifyUsers();
       case 2:
