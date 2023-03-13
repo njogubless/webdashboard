@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Hikers Dash'),
+      home: const MyHomePage(title: 'Hikers Dashboard'),
     );
   }
 }
