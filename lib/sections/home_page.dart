@@ -75,11 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
           _showSection(_selectedIndex),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
