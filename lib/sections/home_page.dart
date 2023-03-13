@@ -10,15 +10,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
   int _selectedIndex = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
               _selectedIndex = index;
             }),
             minWidth: 100,
+            elevation: 1,
             useIndicator: true,
             indicatorColor: Colors.cyanAccent,
             labelType: NavigationRailLabelType.all,
@@ -61,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {},
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
