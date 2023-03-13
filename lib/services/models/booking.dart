@@ -1,25 +1,25 @@
 class Booking {
-  final String clientID;
-  final String eventID;
+  final String userEmail;
+  final String eventName;
   final String bookingDate;
   const Booking({
-    required this.clientID,
-    required this.eventID,
+    required this.userEmail,
+    required this.eventName,
     required this.bookingDate,
   });
 
   factory Booking.fromJson(Map<String, dynamic> booking) {
     return Booking(
-      clientID: booking['clientID'],
-      eventID: booking['eventID'],
+      userEmail: booking['userEmail'],
+      eventName: booking['eventName'],
       bookingDate: booking['bookingDate'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'clientID': clientID,
-      'eventID': eventID,
+      'userEmail': userEmail,
+      'eventName': eventName,
       'bookingDate': bookingDate,
     };
   }
