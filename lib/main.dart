@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webdashboard/bootstrap.dart';
-import 'package:webdashboard/services/_index.dart';
 import 'package:webdashboard/utils/_index.dart';
 import 'package:webdashboard/webdashboard/webdashboard.dart';
 
@@ -27,12 +26,11 @@ Future<void> main() async {
   WDConfig(
     values: WDValues(
       urlScheme: 'https',
-      baseDomain: 'staging.nawiriwin.com',
-      hiveDBKey: 'webdashboard_staging',
+      baseDomain: 'main.nawiriwin.com',
+      hiveDBKey: 'webdashboard_main',
     ),
   );
 
-  await HiveServiceImpl().initBoxes();
   await ScreenUtil.ensureScreenSize();
 
   Bloc.observer = AppBlocObserver();

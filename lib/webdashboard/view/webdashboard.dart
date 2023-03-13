@@ -21,7 +21,7 @@ class WebDashboard extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: WDTheme.theme(),
-      initialRoute: WDRouter.decisionPage,
+      initialRoute: WDRouter.sectionsRoute,
       onGenerateRoute: WDRouter.generateRoute,
     );
   }
