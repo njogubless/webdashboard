@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hikers_dash/sections/booked_events/booked_events.dart';
+import 'package:hikers_dash/sections/manage_events/manage_events.dart';
+import 'package:hikers_dash/sections/verify_users/verify_users.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -11,6 +14,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+
+  Widget _showSection(int index) {
+    switch (index) {
+      case 0:
+        return const Center(
+          child: Text('Home'),
+        );
+      case 1:
+        return const VerifyUsers();
+      case 2:
+        return const ManageEvents();
+      case 3:
+        return const BookedEvents();
+      default:
+        return const Center(
+          child: Text('Home'),
+        );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
             selectedIndex: _selectedIndex,
           ),
-          Flexible(child: Text('Index $_selectedIndex')),
+          _showSection(_selectedIndex),
         ],
       ),
       floatingActionButton: FloatingActionButton(
