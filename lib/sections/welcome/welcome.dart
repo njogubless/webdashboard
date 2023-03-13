@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hikers_dash/services/database.dart';
+import 'package:hikers_dash/services/models/client.dart';
 
 class WelcomeSection extends StatefulWidget {
   const WelcomeSection({
@@ -32,22 +34,29 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                 ),
               ),
               SizedBox(height: 50),
-              const Text(
-                'House keeping',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
-                ),
-              ),
-              SizedBox(height: 20),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Verified users: 10'),
-                  Text('Users awaiting verification: 3'),
-                ],
-              ),
+              FutureBuilder<List<Client>>(
+                  future: Database.getClients(),
+                  builder: (context, snapshot) {
+                    final clients = snapshot.data;
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'House keeping',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                            'Verified users: ${clients!.where((client) => client.verified).length}'),
+                        Text(
+                            'Users awaiting verification: ${clients.where((client) => !client.verified).length}'),
+                      ],
+                    );
+                  }),
               SizedBox(height: 20),
               MaterialButton(
                 onPressed: () => widget.switchPage(1),

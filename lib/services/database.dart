@@ -51,6 +51,17 @@ class Database {
   }
 
   // Retrieve pending clients
+  static Future<List<Client>> getClients() async {
+    final QuerySnapshot querySnapshot = await firestore
+        .collection('clients')
+        .get();
+    final List<QueryDocumentSnapshot> docs = querySnapshot.docs;
+    return docs
+        .map((doc) => Client.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+  }
+
+  // Retrieve pending clients
   static Future<List<Client>> getPendingClients() async {
     final QuerySnapshot querySnapshot = await firestore
         .collection('clients')
