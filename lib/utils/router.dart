@@ -1,19 +1,13 @@
 part of webdashboard_utils;
 
 class WDRouter {
-  static const String decisionPage = '/';
-  static const String welcomeRoute = '/welcome';
-  static const String sectionsRoute = '/sections';
+  static const String sectionsRoute = '/';
   static const String settingsRoute = '/settings';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     // final args = settings.arguments;
 
     switch (settings.name) {
-      case decisionPage:
-        return _route(const DecisionPage(), decisionPage);
-      case welcomeRoute:
-        return _route(const WelcomePage(), welcomeRoute);
       case sectionsRoute:
         return _route(const SectionsPage(), sectionsRoute);
       case settingsRoute:
@@ -22,7 +16,7 @@ class WDRouter {
         return _route(
           Scaffold(
             appBar: AppBar(
-              title: const Text('Nawiri Windows App'),
+              title: const Text('Web Dashboard'),
             ),
             body: const Center(
               child: Text('Unknown page'),
@@ -34,7 +28,7 @@ class WDRouter {
   }
 
   static Route<dynamic> _route(Widget page, String route) {
-    if (route == welcomeRoute) {
+    if (route == sectionsRoute) {
       return PageRoutes.sharedAxis<dynamic>(
         () => page,
       );
