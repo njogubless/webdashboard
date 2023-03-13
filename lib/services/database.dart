@@ -71,4 +71,13 @@ class Database {
         .get();
     await querySnapshot.docs.first.reference.update({'verified': true});
   }
+
+  // Retrieve pending clients
+  static Future<void> deleteEvent(Event event) async {
+    final QuerySnapshot querySnapshot = await firestore
+        .collection('events')
+        .where('eventName', isEqualTo: event.eventName)
+        .get();
+    await querySnapshot.docs.first.reference.delete();
+  }
 }

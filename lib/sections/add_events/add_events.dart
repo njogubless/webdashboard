@@ -27,10 +27,10 @@ class _AddEventsState extends State<AddEvents> {
         padding: const EdgeInsets.only(top: 20, left: 50),
         child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Manage Events',
+                'Add Events',
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 50,

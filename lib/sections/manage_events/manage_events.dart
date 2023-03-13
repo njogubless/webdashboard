@@ -10,6 +10,8 @@ class ManageEvents extends StatefulWidget {
 }
 
 class _ManageEventsState extends State<ManageEvents> {
+  void refresh() => setState(() {});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -19,7 +21,7 @@ class _ManageEventsState extends State<ManageEvents> {
         padding: const EdgeInsets.only(top: 20, left: 50),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               'Manage Events',
@@ -39,7 +41,10 @@ class _ManageEventsState extends State<ManageEvents> {
                   child: ListView.builder(
                       itemCount: events!.length,
                       itemBuilder: (context, index) {
-                        return AvailableEvent(event: events[index]);
+                        return AvailableEvent(
+                          event: events[index],
+                          refresh: refresh,
+                        );
                       }),
                 );
               },
@@ -55,18 +60,27 @@ class AvailableEvent extends StatelessWidget {
   const AvailableEvent({
     super.key,
     required this.event,
+    required this.refresh,
   });
 
   final Event event;
+  final VoidCallback refresh;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       trailing: IconButton(
-          onPressed: () {},
+          onPressed: () async {
+            Database.deleteEvent(event);
+            refresh();
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Event deleted!'),
+              behavior: SnackBarBehavior.floating,
+            ));
+          },
           icon: const Icon(
-            Icons.email,
-            color: Colors.blue,
+            Icons.delete,
+            color: Colors.red,
           )),
       title: Text(
         event.eventName,
