@@ -36,6 +36,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
               SizedBox(height: 50),
               FutureBuilder<List<Client>>(
                   future: Database.getClients(),
+                  initialData: [],
                   builder: (context, snapshot) {
                     final clients = snapshot.data;
                     return Column(
