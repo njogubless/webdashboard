@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/client.dart';
 
-class VerifyUsers extends StatelessWidget {
+class VerifyUsers extends StatefulWidget {
   const VerifyUsers({super.key});
+
+  @override
+  State<VerifyUsers> createState() => _VerifyUsersState();
+}
+
+class _VerifyUsersState extends State<VerifyUsers> {
+  void refresh() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +36,19 @@ class VerifyUsers extends StatelessWidget {
               initialData: const [],
               builder: (context, snapshot) {
                 final clients = snapshot.data;
-                return SizedBox(
-                  height: 400,
-                  child: ListView.builder(
-                      itemCount: clients!.length,
-                      itemBuilder: (context, index) {
-                        return PendingUserTile(client: clients[index]);
-                      }),
-                );
+                return clients!.isEmpty
+                    ? const Text('No pending verifications')
+                    : SizedBox(
+                        height: 400,
+                        child: ListView.builder(
+                            itemCount: clients.length,
+                            itemBuilder: (context, index) {
+                              return PendingUserTile(
+                                client: clients[index],
+                                refresh: refresh,
+                              );
+                            }),
+                      );
               },
             ),
           ],
@@ -50,15 +62,20 @@ class PendingUserTile extends StatelessWidget {
   const PendingUserTile({
     super.key,
     required this.client,
+    required this.refresh,
   });
 
   final Client client;
+  final VoidCallback refresh;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       trailing: TextButton(
-        onPressed: () {},
+        onPressed: () async {
+          await Database.verifyser(client);
+          refresh();
+        },
         child: const Text('Verify user'),
       ),
       title: Text(
