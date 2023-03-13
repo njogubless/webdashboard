@@ -27,7 +27,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Welcome to HikersAfrique',
+                'Welcome to HikersAfrique Admin Panel',
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 30,
