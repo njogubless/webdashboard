@@ -6,9 +6,7 @@ import 'package:hikers_dash/sections/verify_users/verify_users.dart';
 import 'package:hikers_dash/sections/welcome/welcome.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
