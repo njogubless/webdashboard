@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hikers_dash/firebase_options.dart';
-import 'package:hikers_dash/sections/home_page.dart';
+import 'package:hikers_dash/sections/authenticate/wrapper.dart';
 import 'package:hikers_dash/services/auth.dart';
 import 'package:hikers_dash/services/auth_notifer.dart';
 import 'package:hikers_dash/services/models/client.dart';
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: const MyHomePage(),
+          home: const Wrapper(),
         ),
       ),
     );

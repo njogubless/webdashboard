@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:hikers_dash/services/auth_notifer.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/client.dart';
+import 'package:provider/provider.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -50,10 +53,15 @@ class AuthService {
 
   //sign in with email & password
   Future<Client?> signInWithEmailAndPassword(
-      String email, String password) async {
+      String email, String password, BuildContext context) async {
     try {
+      final clientData = await Database.getClientData(email);
+      Provider.of<AuthNotifier>(context, listen: false).setUser(clientData);
+      if (clientData.role != 'admin') {
+        throw Exception();
+      }
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      return await Database.getClientData(email);
+      return clientData;
     } catch (e) {
       return null;
     }

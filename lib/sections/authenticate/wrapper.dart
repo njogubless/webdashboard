@@ -11,7 +11,6 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     // Return either Home or Authentication widget
 
-    // Using the data from the Provider
     final userAuth = Provider.of<Client?>(context);
 
     // Return either Home() or Authenticate()

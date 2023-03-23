@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hikers_dash/misc/constants.dart';
 import 'package:hikers_dash/services/auth.dart';
-import 'package:hikers_dash/services/auth_notifer.dart';
 import 'package:hikers_dash/services/models/client.dart';
-import 'package:provider/provider.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -43,7 +41,6 @@ class _SignInState extends State<SignIn> {
               systemOverlayStyle: SystemUiOverlayStyle.dark,
             ),
             body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Stack(
                   children: <Widget>[
@@ -59,21 +56,12 @@ class _SignInState extends State<SignIn> {
                           style: TextStyle(
                               fontSize: 80.0, fontWeight: FontWeight.bold)),
                     ),
-                    Container(
-                      padding:
-                          const EdgeInsets.fromLTRB(177.0, 110.0, 0.0, 0.0),
-                      child: const Text('.',
-                          style: TextStyle(
-                            fontSize: 80.0,
-                            fontWeight: FontWeight.bold,
-                            color: lightBlue,
-                          )),
-                    )
                   ],
                 ),
+                SizedBox(height: 30),
                 Container(
-                    padding: const EdgeInsets.only(
-                        top: 30.0, left: 20.0, right: 20.0),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * .3),
                     child: Form(
                       key: _formkey,
                       child: Column(
@@ -129,18 +117,13 @@ class _SignInState extends State<SignIn> {
                                   // AuthService method to sign in user when validation is successful
                                   Client? result =
                                       await _auth.signInWithEmailAndPassword(
-                                          email, password);
+                                          email, password, context);
 
                                   if (result == null) {
                                     loading = false;
                                     setState(() => error =
                                         'Invalid login, please try again');
-                                  } else {
-                                    Provider.of<AuthNotifier>(context,
-                                            listen: false)
-                                        .setUser(result);
                                   }
-
                                   // Else, the Wrapper gets a new user and shows the Home Page
                                 }
                               },
@@ -170,7 +153,7 @@ class _SignInState extends State<SignIn> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     const Text(
-                      'Don\'t have an account?',
+                      'Admin sign in',
                       style: TextStyle(fontFamily: 'Montserrat'),
                     ),
                     const SizedBox(width: 5.0),
