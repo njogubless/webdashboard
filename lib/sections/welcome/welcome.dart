@@ -81,7 +81,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                                 }),
                             SizedBox(width: 10),
                             FutureBuilder<int>(
-                                future: Database.getNumberOfEvents(),
+                                future: Database.getTotalRevenue(),
                                 initialData: 0,
                                 builder: (context, snapshot) {
                                   final income = snapshot.data!;
