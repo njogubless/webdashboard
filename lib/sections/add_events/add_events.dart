@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/event.dart';
+import 'package:uuid/uuid.dart';
 
 class AddEvents extends StatefulWidget {
   const AddEvents({super.key});
@@ -34,6 +35,7 @@ class _AddEventsState extends State<AddEvents> {
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 50,
+                  color: Colors.indigo,
                 ),
               ),
               Form(
@@ -116,6 +118,7 @@ class _AddEventsState extends State<AddEvents> {
                       onPressed: () async {
                         await Database.createEvent(
                           Event(
+                            eventID: const Uuid().v4(),
                             eventCost: int.parse(_eventCostController.text),
                             eventDate: _eventDateController.text,
                             eventImageUrl: _eventImageUrlController.text,
