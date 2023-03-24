@@ -13,8 +13,8 @@ class InfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
-      width: 150,
+      height: 200,
+      width: 250,
       padding: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         color: Colors.indigo,
@@ -27,12 +27,12 @@ class InfoTile extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             Text(
               '$stat',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white, fontSize: 25),
             ),
           ],
         ),
