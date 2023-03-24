@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hikers_dash/sections/welcome/info_tile.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/client.dart';
 
@@ -43,18 +44,24 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'House keeping',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20,
-                          ),
-                        ),
                         SizedBox(height: 20),
-                        Text(
-                            'Verified users: ${clients!.where((client) => client.verified).length}'),
-                        Text(
-                            'Users awaiting verification: ${clients.where((client) => !client.verified).length}'),
+                        Row(
+                          children: [
+                            InfoTile(
+                              title: 'Verified users',
+                              stat: clients!
+                                  .where((client) => client.verified)
+                                  .length,
+                            ),
+                            SizedBox(width: 10),
+                            InfoTile(
+                              title: 'Users awaiting verification',
+                              stat: clients
+                                  .where((client) => !client.verified)
+                                  .length,
+                            ),
+                          ],
+                        ),
                       ],
                     );
                   }),
