@@ -34,9 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return const BookedEvents();
       default:
         AuthService().signOut();
-        return const Center(
-          child: Text('Home'),
-        );
+        return const Center();
     }
   }
 

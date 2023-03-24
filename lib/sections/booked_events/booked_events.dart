@@ -10,80 +10,82 @@ class BookedEvents extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 20, left: 50),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Booked Events',
-            style: TextStyle(
-              fontWeight: FontWeight.w900,
-              fontSize: 50,
-              color: Colors.indigo,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Booked Events',
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: 50,
+                color: Colors.indigo,
+              ),
             ),
-          ),
-          const SizedBox(height: 30),
-          FutureBuilder<List<BookedEventItem>>(
-            future: Database.getBookedEvents(),
-            initialData: const [],
-            builder: (context, snapshot) {
-              final bookedEvents = snapshot.data!;
-              return DataTable(
-                columns: [
-                  DataColumn(
-                    label: Text('#'),
-                  ),
-                  DataColumn(
-                    label: Text('Event Name'),
-                  ),
-                  DataColumn(
-                    label: Text('User Name'),
-                  ),
-                  DataColumn(
-                    label: Text('User Email'),
-                  ),
-                  DataColumn(
-                    label: Text('Date Booked'),
-                  ),
-                  DataColumn(
-                    label: Text('Reach out'),
-                  ),
-                ],
-                rows: [
-                  for (final event in bookedEvents)
-                    DataRow(
-                      cells: [
-                        DataCell(Text('${bookedEvents.indexOf(event) + 1}')),
-                        DataCell(Text(event.eventName)),
-                        DataCell(Text(event.userName)),
-                        DataCell(Text(event.userEmail)),
-                        DataCell(Text(event.bookingDate.substring(0, 10))),
-                        DataCell(
-                          IconButton(
-                            onPressed: () {
-                              final Uri emailLaunchUri = Uri(
-                                scheme: 'mailto',
-                                path: event.userEmail,
-                                query: encodeQueryParameters(<String, String>{
-                                  'subject': 'RE: ${event.eventName}',
-                                }),
-                              );
+            const SizedBox(height: 30),
+            FutureBuilder<List<BookedEventItem>>(
+              future: Database.getBookedEvents(),
+              initialData: const [],
+              builder: (context, snapshot) {
+                final bookedEvents = snapshot.data!;
+                return DataTable(
+                  columns: [
+                    DataColumn(
+                      label: Text('#'),
+                    ),
+                    DataColumn(
+                      label: Text('Event Name'),
+                    ),
+                    DataColumn(
+                      label: Text('User Name'),
+                    ),
+                    DataColumn(
+                      label: Text('User Email'),
+                    ),
+                    DataColumn(
+                      label: Text('Date Booked'),
+                    ),
+                    DataColumn(
+                      label: Text('Reach out'),
+                    ),
+                  ],
+                  rows: [
+                    for (final event in bookedEvents)
+                      DataRow(
+                        cells: [
+                          DataCell(Text('${bookedEvents.indexOf(event) + 1}')),
+                          DataCell(Text(event.eventName)),
+                          DataCell(Text(event.userName)),
+                          DataCell(Text(event.userEmail)),
+                          DataCell(Text(event.bookingDate.substring(0, 10))),
+                          DataCell(
+                            IconButton(
+                              onPressed: () {
+                                final Uri emailLaunchUri = Uri(
+                                  scheme: 'mailto',
+                                  path: event.userEmail,
+                                  query: encodeQueryParameters(<String, String>{
+                                    'subject': 'RE: ${event.eventName}',
+                                  }),
+                                );
 
-                              launchUrl(emailLaunchUri);
-                            },
-                            icon: const Icon(
-                              Icons.email,
-                              color: Colors.blue,
+                                launchUrl(emailLaunchUri);
+                              },
+                              icon: const Icon(
+                                Icons.email,
+                                color: Colors.blue,
+                              ),
                             ),
-                          ),
-                        )
-                      ],
-                    )
-                ],
-              );
-            },
-          ),
-        ],
+                          )
+                        ],
+                      )
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

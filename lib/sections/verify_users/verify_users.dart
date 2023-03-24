@@ -16,67 +16,69 @@ class _VerifyUsersState extends State<VerifyUsers> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 20, left: 50),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'HikersAfrique Users',
-            style: TextStyle(
-              fontWeight: FontWeight.w900,
-              fontSize: 50,
-              color: Colors.indigo,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'HikersAfrique Users',
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: 50,
+                color: Colors.indigo,
+              ),
             ),
-          ),
-          const SizedBox(height: 30),
-          FutureBuilder<List<Client>>(
-            future: Database.getClients(),
-            initialData: const [],
-            builder: (context, snapshot) {
-              final clients = snapshot.data!;
-              return DataTable(
-                columns: [
-                  DataColumn(
-                    label: Text('#'),
-                  ),
-                  DataColumn(
-                    label: Text('Client Name'),
-                  ),
-                  DataColumn(
-                    label: Text('Client Email'),
-                  ),
-                  DataColumn(
-                    label: Text('Client Role'),
-                  ),
-                  DataColumn(
-                    label: Text('Client Status'),
-                  ),
-                  DataColumn(
-                    label: Text('Action'),
-                  ),
-                ],
-                rows: [
-                  for (final client in clients)
-                    DataRow(
-                      cells: [
-                        DataCell(Text('${clients.indexOf(client) + 1}')),
-                        DataCell(Text(client.clientName)),
-                        DataCell(Text('${client.clientEmail}')),
-                        DataCell(Text('${client.role}')),
-                        DataCell(Text('${client.status}')),
-                        DataCell(
-                          UserActionButton(
-                            client: client,
-                            refresh: refresh,
-                          ),
-                        )
-                      ],
-                    )
-                ],
-              );
-            },
-          ),
-        ],
+            const SizedBox(height: 30),
+            FutureBuilder<List<Client>>(
+              future: Database.getClients(),
+              initialData: const [],
+              builder: (context, snapshot) {
+                final clients = snapshot.data!;
+                return DataTable(
+                  columns: [
+                    DataColumn(
+                      label: Text('#'),
+                    ),
+                    DataColumn(
+                      label: Text('Client Name'),
+                    ),
+                    DataColumn(
+                      label: Text('Client Email'),
+                    ),
+                    DataColumn(
+                      label: Text('Client Role'),
+                    ),
+                    DataColumn(
+                      label: Text('Client Status'),
+                    ),
+                    DataColumn(
+                      label: Text('Action'),
+                    ),
+                  ],
+                  rows: [
+                    for (final client in clients)
+                      DataRow(
+                        cells: [
+                          DataCell(Text('${clients.indexOf(client) + 1}')),
+                          DataCell(Text(client.clientName)),
+                          DataCell(Text('${client.clientEmail}')),
+                          DataCell(Text('${client.role}')),
+                          DataCell(Text('${client.status}')),
+                          DataCell(
+                            UserActionButton(
+                              client: client,
+                              refresh: refresh,
+                            ),
+                          )
+                        ],
+                      )
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
