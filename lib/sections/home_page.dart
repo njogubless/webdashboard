@@ -4,6 +4,7 @@ import 'package:hikers_dash/sections/add_events/add_events.dart';
 import 'package:hikers_dash/sections/manage_events/manage_events.dart';
 import 'package:hikers_dash/sections/verify_users/verify_users.dart';
 import 'package:hikers_dash/sections/welcome/welcome.dart';
+import 'package:hikers_dash/services/auth.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -32,6 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 4:
         return const BookedEvents();
       default:
+        AuthService().signOut();
         return const Center(
           child: Text('Home'),
         );
@@ -79,13 +81,25 @@ class _MyHomePageState extends State<MyHomePage> {
                   selectedIcon: Icon(Icons.event_available),
                   label: Text('Booked Events'),
                 ),
+                NavigationRailDestination(
+                  icon: Icon(
+                    Icons.logout_rounded,
+                    color: Colors.red,
+                  ),
+                  selectedIcon: Icon(
+                    Icons.logout_rounded,
+                    color: Colors.red,
+                  ),
+                  label: Text(
+                    'Logout',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
               ],
               selectedIndex: _selectedIndex,
             ),
           ),
-          Flexible(
-            flex: 7,
-            child: _showSection(_selectedIndex)),
+          Flexible(flex: 7, child: _showSection(_selectedIndex)),
         ],
       ),
     );
