@@ -14,44 +14,80 @@ class _ManageEventsState extends State<ManageEvents> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      width: 500,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20, left: 50),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Manage Events',
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 50,
-                color: Colors.indigo,
-              ),
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, left: 50),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Manage Events',
+            style: TextStyle(
+              fontWeight: FontWeight.w900,
+              fontSize: 50,
+              color: Colors.indigo,
             ),
-            const SizedBox(height: 30),
-            FutureBuilder<List<Event>>(
-              future: Database.getAvailableEvents(),
-              initialData: const [],
-              builder: (context, snapshot) {
-                final events = snapshot.data;
-                return SizedBox(
-                  height: 400,
-                  child: ListView.builder(
-                      itemCount: events!.length,
-                      itemBuilder: (context, index) {
-                        return AvailableEvent(
-                          event: events[index],
-                          refresh: refresh,
-                        );
-                      }),
-                );
-              },
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 30),
+          FutureBuilder<List<Event>>(
+            future: Database.getAvailableEvents(),
+            initialData: const [],
+            builder: (context, snapshot) {
+              final events = snapshot.data!;
+              return DataTable(
+                columns: [
+                  DataColumn(
+                    label: Text('#'),
+                  ),
+                  DataColumn(
+                    label: Text('Event Name'),
+                  ),
+                  DataColumn(
+                    label: Text('Event Cost (Ksh)'),
+                  ),
+                  DataColumn(
+                    label: Text('Event Date'),
+                  ),
+                  DataColumn(
+                    label: Text('Event Time'),
+                  ),
+                  DataColumn(
+                    label: Text('Action'),
+                  ),
+                ],
+                rows: [
+                  for (final event in events)
+                    DataRow(
+                      cells: [
+                        DataCell(Text('${events.indexOf(event) + 1}')),
+                        DataCell(Text(event.eventName)),
+                        DataCell(Text('${event.eventCost}')),
+                        DataCell(Text(event.eventDate)),
+                        DataCell(Text(event.eventTime)),
+                        DataCell(
+                          IconButton(
+                            onPressed: () async {
+                              Database.deleteEvent(event);
+                              refresh();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text('Event deleted!'),
+                                behavior: SnackBarBehavior.floating,
+                              ));
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
   }
