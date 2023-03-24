@@ -48,13 +48,30 @@ class Database {
   }
 
 // Retrieve a booked events
-  static Future<List<Booking>> getBookedEvents() async {
+  static Future<List<BookedEventItem>> getBookedEvents() async {
+    final users = await getClients();
+    final events = await getAvailableEvents();
     final QuerySnapshot querySnapshot =
         await firestore.collection('bookings').get();
     final List<QueryDocumentSnapshot> docs = querySnapshot.docs;
-    return docs
+    final bookings = docs
         .map((doc) => Booking.fromJson(doc.data() as Map<String, dynamic>))
         .toList();
+    List<BookedEventItem> bookedEvents = [];
+    for (final booking in bookings) {
+      final user =
+          users.where((user) => user.clientEmail == booking.userEmail).first;
+      final event =
+          events.where((event) => event.eventID == booking.eventID).first;
+      bookedEvents.add(BookedEventItem(
+        userEmail: user.clientEmail,
+        userName: user.clientName,
+        eventName: event.eventName,
+        bookingDate: booking.bookingDate,
+      ));
+    }
+
+    return bookedEvents;
   }
 
   // Create event
