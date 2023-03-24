@@ -103,4 +103,34 @@ class Database {
         .get();
     await querySnapshot.docs.first.reference.delete();
   }
+
+  static Future<int> getNumberOfEvents() async {
+    final result = await firestore.collection('events').count().get();
+    return result.count;
+  }
+  
+  // Get number booked
+  static Future<int> getNumberBooked(String eventID) async {
+    final result = await firestore
+        .collection('bookings')
+        .where('eventID', isEqualTo: eventID)
+        .count()
+        .get();
+    return result.count;
+  }
+
+  // Retrieve available events
+  static Future<int> getTotalRevenue() async {
+    int total = 0;
+    final QuerySnapshot querySnapshot =
+        await firestore.collection('events').get();
+    final List<QueryDocumentSnapshot> docs = querySnapshot.docs;
+    final events = docs
+        .map((doc) => Event.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+    for (final event in events) {
+      total += event.eventCost * await getNumberBooked(event.eventID);
+    }
+    return total;
+  }
 }
