@@ -14,87 +14,70 @@ class _VerifyUsersState extends State<VerifyUsers> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      width: 500,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20, left: 50),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            const Text(
-              'Pending Verification',
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 50,
-                color: Colors.indigo,
-              ),
-            ),
-            const SizedBox(height: 30),
-            FutureBuilder<List<Client>>(
-              future: Database.getPendingClients(),
-              initialData: const [],
-              builder: (context, snapshot) {
-                final clients = snapshot.data;
-                return clients!.isEmpty
-                    ? const Text('No pending verifications')
-                    : SizedBox(
-                        height: 400,
-                        child: ListView.builder(
-                            itemCount: clients.length,
-                            itemBuilder: (context, index) {
-                              return PendingUserTile(
-                                client: clients[index],
-                                refresh: refresh,
-                              );
-                            }),
-                      );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class PendingUserTile extends StatelessWidget {
-  const PendingUserTile({
-    super.key,
-    required this.client,
-    required this.refresh,
-  });
-
-  final Client client;
-  final VoidCallback refresh;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      trailing: TextButton(
-        onPressed: () async {
-          await Database.verifyser(client);
-          refresh();
-        },
-        child: const Text('Verify user'),
-      ),
-      title: Text(
-        client.clientEmail,
-        style: const TextStyle(
-          fontWeight: FontWeight.w900,
-          fontSize: 20,
-        ),
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            'Not verified',
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, left: 50),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const Text(
+            'HikersAfrique Users',
             style: TextStyle(
-              fontWeight: FontWeight.w300,
-              fontSize: 20,
+              fontWeight: FontWeight.w900,
+              fontSize: 50,
+              color: Colors.indigo,
             ),
+          ),
+          const SizedBox(height: 30),
+          FutureBuilder<List<Client>>(
+            future: Database.getClients(),
+            initialData: const [],
+            builder: (context, snapshot) {
+              final clients = snapshot.data!;
+              return DataTable(
+                columns: [
+                  DataColumn(
+                    label: Text('#'),
+                  ),
+                  DataColumn(
+                    label: Text('Client Name'),
+                  ),
+                  DataColumn(
+                    label: Text('Client Email'),
+                  ),
+                  DataColumn(
+                    label: Text('Client Role'),
+                  ),
+                  DataColumn(
+                    label: Text('Client Status'),
+                  ),
+                  DataColumn(
+                    label: Text('Action'),
+                  ),
+                ],
+                rows: [
+                  for (final client in clients)
+                    DataRow(
+                      cells: [
+                        DataCell(Text('${clients.indexOf(client) + 1}')),
+                        DataCell(Text(client.clientName)),
+                        DataCell(Text('${client.clientEmail}')),
+                        DataCell(Text('${client.role}')),
+                        DataCell(Text('${client.status}')),
+                        DataCell(
+                          TextButton(
+                            onPressed: () async {
+                              await Database.verifyser(client);
+                              refresh();
+                            },
+                            child: const Text('Verify user'),
+                          ),
+                        )
+                      ],
+                    )
+                ],
+              );
+            },
           ),
         ],
       ),
