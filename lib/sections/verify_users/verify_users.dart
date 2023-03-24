@@ -41,16 +41,16 @@ class _VerifyUsersState extends State<VerifyUsers> {
                       label: Text('#'),
                     ),
                     DataColumn(
-                      label: Text('Client Name'),
+                      label: Text('Name'),
                     ),
                     DataColumn(
-                      label: Text('Client Email'),
+                      label: Text('Email'),
                     ),
                     DataColumn(
-                      label: Text('Client Role'),
+                      label: Text('Role'),
                     ),
                     DataColumn(
-                      label: Text('Client Status'),
+                      label: Text('Status'),
                     ),
                     DataColumn(
                       label: Text('Action'),
