@@ -28,6 +28,7 @@ class _VerifyUsersState extends State<VerifyUsers> {
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: 50,
+                color: Colors.indigo,
               ),
             ),
             const SizedBox(height: 30),
