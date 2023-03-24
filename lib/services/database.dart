@@ -89,10 +89,19 @@ class Database {
   static Future<void> verifyser(Client client) async {
     final QuerySnapshot querySnapshot = await firestore
         .collection('clients')
-        .where('status', isEqualTo: 'Pending')
         .where('clientEmail', isEqualTo: client.clientEmail)
         .get();
     await querySnapshot.docs.first.reference.update({'status': 'Verified'});
+  }
+
+  // Retrieve pending clients
+  static Future<void> revokeUser(Client client) async {
+    final QuerySnapshot querySnapshot = await firestore
+        .collection('clients')
+        .where('status', isEqualTo: 'Verified')
+        .where('clientEmail', isEqualTo: client.clientEmail)
+        .get();
+    await querySnapshot.docs.first.reference.update({'status': 'Rejected'});
   }
 
   // Retrieve pending clients

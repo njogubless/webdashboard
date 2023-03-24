@@ -18,7 +18,7 @@ class _VerifyUsersState extends State<VerifyUsers> {
       padding: const EdgeInsets.only(top: 20, left: 50),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             'HikersAfrique Users',
@@ -65,12 +65,9 @@ class _VerifyUsersState extends State<VerifyUsers> {
                         DataCell(Text('${client.role}')),
                         DataCell(Text('${client.status}')),
                         DataCell(
-                          TextButton(
-                            onPressed: () async {
-                              await Database.verifyser(client);
-                              refresh();
-                            },
-                            child: const Text('Verify user'),
+                          UserActionButton(
+                            client: client,
+                            refresh: refresh,
                           ),
                         )
                       ],
@@ -80,6 +77,37 @@ class _VerifyUsersState extends State<VerifyUsers> {
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+class UserActionButton extends StatelessWidget {
+  const UserActionButton({
+    super.key,
+    required this.client,
+    required this.refresh,
+  });
+
+  final Client client;
+  final VoidCallback refresh;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () async {
+        if (client.status == 'Verified') {
+          await Database.revokeUser(client);
+        } else {
+          await Database.verifyser(client);
+        }
+        refresh();
+      },
+      child: Text(
+        client.status == 'Verified' ? 'Revoke user' : 'Verify user',
+        style: TextStyle(
+          color: client.status == 'Verified' ? Colors.red : null,
+        ),
       ),
     );
   }
