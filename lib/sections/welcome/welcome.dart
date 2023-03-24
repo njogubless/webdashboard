@@ -53,14 +53,16 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                             InfoTile(
                               title: 'Verified users',
                               stat: clients!
-                                  .where((client) => client.verified)
+                                  .where(
+                                      (client) => client.status == 'Verified')
                                   .length,
                             ),
                             SizedBox(width: 10),
                             InfoTile(
                               title: 'Users awaiting verification',
                               stat: clients
-                                  .where((client) => !client.verified)
+                                  .where(
+                                      (client) => !(client.status == 'Verified'))
                                   .length,
                             ),
                           ],

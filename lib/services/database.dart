@@ -77,7 +77,7 @@ class Database {
   static Future<List<Client>> getPendingClients() async {
     final QuerySnapshot querySnapshot = await firestore
         .collection('clients')
-        .where('verified', isEqualTo: false)
+        .where('status', isEqualTo: 'Pending')
         .get();
     final List<QueryDocumentSnapshot> docs = querySnapshot.docs;
     return docs
@@ -89,10 +89,10 @@ class Database {
   static Future<void> verifyser(Client client) async {
     final QuerySnapshot querySnapshot = await firestore
         .collection('clients')
-        .where('verified', isEqualTo: false)
+        .where('status', isEqualTo: 'Pending')
         .where('clientEmail', isEqualTo: client.clientEmail)
         .get();
-    await querySnapshot.docs.first.reference.update({'verified': true});
+    await querySnapshot.docs.first.reference.update({'status': 'Verified'});
   }
 
   // Retrieve pending clients
@@ -108,7 +108,7 @@ class Database {
     final result = await firestore.collection('events').count().get();
     return result.count;
   }
-  
+
   // Get number booked
   static Future<int> getNumberBooked(String eventID) async {
     final result = await firestore
