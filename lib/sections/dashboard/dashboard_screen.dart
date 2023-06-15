@@ -60,7 +60,7 @@ class MainContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
-      builder: (BuildContext context, sizingInformation) {
+      builder: (BuildContext context, SizingInformation sizingInformation) {
         if (sizingInformation.isDesktop) {
           return Container(
             padding: EdgeInsets.all(16.0),
@@ -94,7 +94,6 @@ class MainContent extends StatelessWidget {
     );
   }
 }
-
 
 void main() {
   runApp(MaterialApp(
