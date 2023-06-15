@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class BookingScreen extends StatefulWidget {
@@ -118,6 +119,55 @@ class MyApp extends StatelessWidget {
               bookingDetails: ModalRoute.of(context)!.settings.arguments as String,
             ),
       },
+    );
+  }
+}
+
+class Receiptscreen extends StatelessWidget {
+  final String bookingDetails;
+
+  Receiptscreen({required this.bookingDetails});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Receipt Screen'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Booking Details:',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8.0),
+            Text(bookingDetails),
+            SizedBox(height: 16.0),
+            Text(
+              'Payment Details:',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8.0),
+            // Add payment details here
+
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () async {
+                String receiptUrl = 'http://example.com/receipt.pdf'; // Replace with your receipt URL
+                if (await canLaunch(receiptUrl)) {
+                  await launch(receiptUrl);
+                } else {
+                  throw 'Could not launch $receiptUrl';
+                }
+              },
+              child: Text('Download Receipt'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
