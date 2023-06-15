@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class DashboardScreen extends StatelessWidget {
   @override
@@ -59,7 +60,7 @@ class MainContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
-      builder: (BuildContext context, SizingInformation sizingInformation) {
+      builder: (BuildContext context, sizingInformation) {
         if (sizingInformation.isDesktop) {
           return Container(
             padding: EdgeInsets.all(16.0),
@@ -93,6 +94,7 @@ class MainContent extends StatelessWidget {
     );
   }
 }
+
 
 void main() {
   runApp(MaterialApp(
