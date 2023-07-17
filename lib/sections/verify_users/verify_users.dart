@@ -1,116 +1,213 @@
 import 'package:flutter/material.dart';
-import 'package:hikers_dash/services/database.dart';
-import 'package:hikers_dash/services/models/client.dart';
 
-class VerifyUsers extends StatefulWidget {
-  const VerifyUsers({super.key});
+enum UserStatus { approved, pending, rejected }
 
-  @override
-  State<VerifyUsers> createState() => _VerifyUsersState();
+class User {
+  final String name;
+  final UserStatus status;
+
+  User(this.name, this.status);
 }
 
-class _VerifyUsersState extends State<VerifyUsers> {
-  void refresh() => setState(() {});
+class UsersPage extends StatelessWidget {
+  final List<User> users = [
+    User('John Doe', UserStatus.approved),
+    User('Jane Smith', UserStatus.pending),
+    User('Mike Johnson', UserStatus.rejected),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 50),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'HikersAfrique Users',
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 50,
-                color: Colors.indigo,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Users'),
+      ),
+      body: ListView.builder(
+        itemCount: users.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(users[index].name),
+            subtitle: Text(users[index].status.toString()),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ApprovedUsersPage extends StatelessWidget {
+  final List<User> users = [
+    User('John Doe', UserStatus.approved),
+    User('Jane Smith', UserStatus.approved),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Approved Users'),
+      ),
+      body: ListView.builder(
+        itemCount: users.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(users[index].name),
+            subtitle: Text(users[index].status.toString()),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class PendingUsersPage extends StatelessWidget {
+  final List<User> users = [
+    User('Mike Johnson', UserStatus.pending),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pending Users'),
+      ),
+      body: ListView.builder(
+        itemCount: users.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(users[index].name),
+            subtitle: Text(users[index].status.toString()),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class RejectedUsersPage extends StatelessWidget {
+  final List<User> users = [
+    User('Alex Brown', UserStatus.rejected),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Rejected Users'),
+      ),
+      body: ListView.builder(
+        itemCount: users.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(users[index].name),
+            subtitle: Text(users[index].status.toString()),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class AdminHomePage extends StatefulWidget {
+  @override
+  _AdminHomePageState createState() => _AdminHomePageState();
+}
+
+class _AdminHomePageState extends State<AdminHomePage> {
+  String _selectedMenuItem = 'Users';
+  Widget _selectedPage = UsersPage();
+
+  void _onMenuItemSelected(String value) {
+    setState(() {
+      _selectedMenuItem = value;
+      if (_selectedMenuItem == 'Users') {
+        _selectedPage = UsersPage();
+      } else if (_selectedMenuItem == 'Approved Users') {
+        _selectedPage = ApprovedUsersPage();
+      } else if (_selectedMenuItem == 'Pending Users') {
+        _selectedPage = PendingUsersPage();
+      } else if (_selectedMenuItem == 'Rejected Users') {
+        _selectedPage = RejectedUsersPage();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Admin Dashboard'),
+      ),
+      body: Row(
+        children: [
+          NavigationRail(
+            destinations: [
+              NavigationRailDestination(
+                icon: Icon(Icons.people),
+                label: Text('Users'),
               ),
-            ),
-            const SizedBox(height: 30),
-            FutureBuilder<List<Client>>(
-              future: Database.getClients(),
-              initialData: const [],
-              builder: (context, snapshot) {
-                final clients = snapshot.data!;
-                return DataTable(
-                  columns: [
-                    DataColumn(
-                      label: Text('#'),
-                    ),
-                    DataColumn(
-                      label: Text('Name'),
-                    ),
-                    DataColumn(
-                      label: Text('Email'),
-                    ),
-                    DataColumn(
-                      label: Text('Role'),
-                    ),
-                    DataColumn(
-                      label: Text('Status'),
-                    ),
-                    DataColumn(
-                      label: Text('Action'),
-                    ),
-                  ],
-                  rows: [
-                    for (final client in clients)
-                      DataRow(
-                        cells: [
-                          DataCell(Text('${clients.indexOf(client) + 1}')),
-                          DataCell(Text(client.clientName)),
-                          DataCell(Text('${client.clientEmail}')),
-                          DataCell(Text('${client.role}')),
-                          DataCell(Text('${client.status}')),
-                          DataCell(
-                            UserActionButton(
-                              client: client,
-                              refresh: refresh,
-                            ),
-                          )
-                        ],
-                      )
-                  ],
-                );
-              },
-            ),
-          ],
-        ),
+              NavigationRailDestination(
+                icon: Icon(Icons.check_circle),
+                label: Text('Approved Users'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.pending),
+                label: Text('Pending Users'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.cancel),
+                label: Text('Rejected Users'),
+              ),
+            ],
+            selectedIndex: _getSelectedIndex(),
+            onDestinationSelected: (int index) {
+              _onMenuItemSelected(_getMenuItemFromIndex(index));
+            },
+          ),
+          VerticalDivider(),
+          Expanded(
+            child: _selectedPage,
+          ),
+        ],
       ),
     );
+  }
+
+  int _getSelectedIndex() {
+    if (_selectedMenuItem == 'Users') {
+      return 0;
+    } else if (_selectedMenuItem == 'Approved Users') {
+      return 1;
+    } else if (_selectedMenuItem == 'Pending Users') {
+      return 2;
+    } else if (_selectedMenuItem == 'Rejected Users') {
+      return 3;
+    }
+    return 0; // Default to Users if none matches
+  }
+
+  String _getMenuItemFromIndex(int index) {
+    switch (index) {
+      case 0:
+        return 'Users';
+      case 1:
+        return 'Approved Users';
+      case 2:
+        return 'Pending Users';
+      case 3:
+        return 'Rejected Users';
+      default:
+        return 'Users';
+    }
   }
 }
 
-class UserActionButton extends StatelessWidget {
-  const UserActionButton({
-    super.key,
-    required this.client,
-    required this.refresh,
-  });
-
-  final Client client;
-  final VoidCallback refresh;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () async {
-        if (client.status == 'Verified') {
-          await Database.revokeUser(client);
-        } else {
-          await Database.verifyser(client);
-        }
-        refresh();
-      },
-      child: Text(
-        client.status == 'Verified' ? 'Revoke user' : 'Verify user',
-        style: TextStyle(
-          color: client.status == 'Verified' ? Colors.red : null,
-        ),
-      ),
-    );
-  }
+void main() {
+  runApp(MaterialApp(
+    title: 'Admin Interface',
+    theme: ThemeData(
+      primarySwatch: Colors.blue,
+    ),
+    home: AdminHomePage(),
+  ));
 }

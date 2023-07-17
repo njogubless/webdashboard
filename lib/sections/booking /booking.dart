@@ -157,8 +157,8 @@ class Receiptscreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 String receiptUrl = 'http://example.com/receipt.pdf'; // Replace with your receipt URL
-                if (await canLaunch(receiptUrl)) {
-                  await launch(receiptUrl);
+                if (await canLaunchUrl(receiptUrl as Uri)) {
+                  await canLaunchUrl(receiptUrl as Uri);
                 } else {
                   throw 'Could not launch $receiptUrl';
                 }
