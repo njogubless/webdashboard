@@ -1,58 +1,98 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 enum UserStatus { approved, pending, rejected }
 
-class User {
+class FirebaseUser {
   final String name;
+  final String email;
+  final String role;
   final UserStatus status;
 
-  User(this.name, this.status);
+  FirebaseUser(this.name, this.email, this.role, this.status);
 }
 
-class UsersPage extends StatelessWidget {
-  final List<User> users = [
-    User('John Doe', UserStatus.approved),
-    User('Jane Smith', UserStatus.pending),
-    User('Mike Johnson', UserStatus.rejected),
-  ];
+class AuthNotifier with ChangeNotifier {
+  final _database = Database.instance.reference();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Users'),
-      ),
-      body: ListView.builder(
-        itemCount: users.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(users[index].name),
-            subtitle: Text(users[index].status.toString()),
-          );
-        },
-      ),
-    );
+  List<FirebaseUser> approvedUsers = [];
+  List<FirebaseUser> pendingUsers = [];
+  List<FirebaseUser> rejectedUsers = [];
+
+  Future<void> fetchUsers() async {
+    final dataSnapshot = await _database.child('users').once();
+
+    if (dataSnapshot.value != null) {
+      final usersMap = dataSnapshot.value as Map<dynamic, dynamic>;
+
+      approvedUsers.clear();
+      pendingUsers.clear();
+      rejectedUsers.clear();
+
+      usersMap.forEach((key, userData) {
+        final name = userData['name'];
+        final email = userData['email'];
+        final role = userData['role'];
+        final status = userData['status'];
+
+        final firebaseUser = FirebaseUser(
+          name,
+          email,
+          role,
+          _getUserStatus(status),
+        );
+
+        switch (firebaseUser.status) {
+          case UserStatus.approved:
+            approvedUsers.add(firebaseUser);
+            break;
+          case UserStatus.pending:
+            pendingUsers.add(firebaseUser);
+            break;
+          case UserStatus.rejected:
+            rejectedUsers.add(firebaseUser);
+            break;
+        }
+      });
+
+      notifyListeners();
+    }
+  }
+
+  UserStatus _getUserStatus(String status) {
+    switch (status) {
+      case 'approved':
+        return UserStatus.approved;
+      case 'pending':
+        return UserStatus.pending;
+      case 'rejected':
+        return UserStatus.rejected;
+      default:
+        return UserStatus.approved;
+    }
   }
 }
 
 class ApprovedUsersPage extends StatelessWidget {
-  final List<User> users = [
-    User('John Doe', UserStatus.approved),
-    User('Jane Smith', UserStatus.approved),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final authNotifier = Provider.of<AuthNotifier>(context);
+    final approvedUsers = authNotifier.approvedUsers;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Approved Users'),
       ),
       body: ListView.builder(
-        itemCount: users.length,
+        itemCount: approvedUsers.length,
         itemBuilder: (context, index) {
+          final user = approvedUsers[index];
+
           return ListTile(
-            title: Text(users[index].name),
-            subtitle: Text(users[index].status.toString()),
+            title: Text(user.name),
+            subtitle: Text(user.email),
+            // Add any additional user details you want to display
           );
         },
       ),
@@ -61,22 +101,24 @@ class ApprovedUsersPage extends StatelessWidget {
 }
 
 class PendingUsersPage extends StatelessWidget {
-  final List<User> users = [
-    User('Mike Johnson', UserStatus.pending),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final authNotifier = Provider.of<AuthNotifier>(context);
+    final pendingUsers = authNotifier.pendingUsers;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Pending Users'),
       ),
       body: ListView.builder(
-        itemCount: users.length,
+        itemCount: pendingUsers.length,
         itemBuilder: (context, index) {
+          final user = pendingUsers[index];
+
           return ListTile(
-            title: Text(users[index].name),
-            subtitle: Text(users[index].status.toString()),
+            title: Text(user.name),
+            subtitle: Text(user.email),
+            // Add any additional user details you want to display
           );
         },
       ),
@@ -85,22 +127,24 @@ class PendingUsersPage extends StatelessWidget {
 }
 
 class RejectedUsersPage extends StatelessWidget {
-  final List<User> users = [
-    User('Alex Brown', UserStatus.rejected),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final authNotifier = Provider.of<AuthNotifier>(context);
+    final rejectedUsers = authNotifier.rejectedUsers;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Rejected Users'),
       ),
       body: ListView.builder(
-        itemCount: users.length,
+        itemCount: rejectedUsers.length,
         itemBuilder: (context, index) {
+          final user = rejectedUsers[index];
+
           return ListTile(
-            title: Text(users[index].name),
-            subtitle: Text(users[index].status.toString()),
+            title: Text(user.name),
+            subtitle: Text(user.email),
+            // Add any additional user details you want to display
           );
         },
       ),
@@ -114,21 +158,17 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
-  String _selectedMenuItem = 'Users';
-  Widget _selectedPage = UsersPage();
+  String _selectedMenuItem = 'Approved Users';
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<AuthNotifier>(context, listen: false).fetchUsers();
+  }
 
   void _onMenuItemSelected(String value) {
     setState(() {
       _selectedMenuItem = value;
-      if (_selectedMenuItem == 'Users') {
-        _selectedPage = UsersPage();
-      } else if (_selectedMenuItem == 'Approved Users') {
-        _selectedPage = ApprovedUsersPage();
-      } else if (_selectedMenuItem == 'Pending Users') {
-        _selectedPage = PendingUsersPage();
-      } else if (_selectedMenuItem == 'Rejected Users') {
-        _selectedPage = RejectedUsersPage();
-      }
     });
   }
 
@@ -142,10 +182,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
         children: [
           NavigationRail(
             destinations: [
-              NavigationRailDestination(
-                icon: Icon(Icons.people),
-                label: Text('Users'),
-              ),
               NavigationRailDestination(
                 icon: Icon(Icons.check_circle),
                 label: Text('Approved Users'),
@@ -174,30 +210,41 @@ class _AdminHomePageState extends State<AdminHomePage> {
   }
 
   int _getSelectedIndex() {
-    if (_selectedMenuItem == 'Users') {
-      return 0;
-    } else if (_selectedMenuItem == 'Approved Users') {
-      return 1;
-    } else if (_selectedMenuItem == 'Pending Users') {
-      return 2;
-    } else if (_selectedMenuItem == 'Rejected Users') {
-      return 3;
+    switch (_selectedMenuItem) {
+      case 'Approved Users':
+        return 0;
+      case 'Pending Users':
+        return 1;
+      case 'Rejected Users':
+        return 2;
+      default:
+        return 0;
     }
-    return 0; // Default to Users if none matches
   }
 
   String _getMenuItemFromIndex(int index) {
     switch (index) {
       case 0:
-        return 'Users';
-      case 1:
         return 'Approved Users';
-      case 2:
+      case 1:
         return 'Pending Users';
-      case 3:
+      case 2:
         return 'Rejected Users';
       default:
-        return 'Users';
+        return 'Approved Users';
+    }
+  }
+
+  Widget get _selectedPage {
+    switch (_selectedMenuItem) {
+      case 'Approved Users':
+        return ApprovedUsersPage();
+      case 'Pending Users':
+        return PendingUsersPage();
+      case 'Rejected Users':
+        return RejectedUsersPage();
+      default:
+        return Container();
     }
   }
 }

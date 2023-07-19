@@ -127,10 +127,16 @@ class _HomeNavigationState extends State<HomeNavigation> {
       case 1:
         return ApprovedUsersPage();
       case 2:
-        return const AddEvents();
+        return PendingUsersPage();
       case 3:
-        return const ManageEvents();
+        return RejectedUsersPage();
       case 4:
+        return ApprovedUsersPage();
+      case 5:
+        return const AddEvents();
+      case 6:
+        return const ManageEvents();
+      case 7:
         return const BookedEvents();
       default:
         AuthService().signOut();
@@ -154,6 +160,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
                     onTap: () => switchToSection(0),
                   ),
                   ExpansionTile(
+                    leading: Icon(Icons.person_2_outlined),
                     title: const Text('Clients'),
                     children: [
                       ListTile(
@@ -197,14 +204,17 @@ class _HomeNavigationState extends State<HomeNavigation> {
                     ],
                   ),
                   ListTile(
+                    leading:Icon(Icons.person_2_rounded) ,
+                    title: const Text('Event Manager'),
+                    onTap: () => switchToSection(3),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.person_2_sharp),
                     title: const Text('Finance Manager'),
                     onTap: () => switchToSection(3),
                   ),
                   ListTile(
-                    title: const Text('Events Manager'),
-                    onTap: () => switchToSection(3),
-                  ),
-                  ListTile(
+                    leading:Icon(Icons.settings) ,
                     title: const Text('Settings'),
                     onTap: () => switchToSection(3),
                   ),
