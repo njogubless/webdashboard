@@ -42,60 +42,71 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                   initialData: [],
                   builder: (context, snapshot) {
                     final clients = snapshot.data;
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InfoTile(
-                              title: 'Verified users',
-                              stat: clients!
-                                  .where(
-                                      (client) => client.status == 'Verified')
-                                  .length,
-                            ),
-                            SizedBox(width: 10),
-                            InfoTile(
-                              title: 'Users awaiting verification',
-                              stat: clients
-                                  .where(
-                                      (client) => !(client.status == 'Verified'))
-                                  .length,
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FutureBuilder<int>(
-                                future: Database.getNumberOfEvents(),
-                                initialData: 0,
-                                builder: (context, snapshot) {
-                                  final events = snapshot.data!;
-                                  return InfoTile(
-                                    title: 'Number of events',
-                                    stat: events,
-                                  );
-                                }),
-                            SizedBox(width: 10),
-                            FutureBuilder<int>(
-                                future: Database.getTotalRevenue(),
-                                initialData: 0,
-                                builder: (context, snapshot) {
-                                  final income = snapshot.data!;
-                                  return InfoTile(
-                                    title: 'Income generated',
-                                    stat: income,
-                                  );
-                                }),
-                          ],
-                        ),
-                      ],
-                    );
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text("Something happened ${snapshot.error}"),
+                      );
+                    } else if (snapshot.hasData && snapshot.data != null) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              InfoTile(
+                                title: 'Verified users',
+                                stat: clients!
+                                    .where(
+                                        (client) => client.status == 'Verified')
+                                    .length,
+                              ),
+                              SizedBox(width: 10),
+                              InfoTile(
+                                title: 'Users awaiting verification',
+                                stat: clients
+                                    .where((client) =>
+                                        !(client.status == 'Verified'))
+                                    .length,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FutureBuilder<int>(
+                                  future: Database.getNumberOfEvents(),
+                                  initialData: 0,
+                                  builder: (context, snapshot) {
+                                    final events = snapshot.data!;
+                                    return InfoTile(
+                                      title: 'Number of events',
+                                      stat: events,
+                                    );
+                                  }),
+                              SizedBox(width: 10),
+                              FutureBuilder<int>(
+                                  future: Database.getTotalRevenue(),
+                                  initialData: 0,
+                                  builder: (context, snapshot) {
+                                    final income = snapshot.data!;
+                                    return InfoTile(
+                                      title: 'Income generated',
+                                      stat: income,
+                                    );
+                                  }),
+                            ],
+                          ),
+                        ],
+                      );
+                    }
+                    return Center(child: Text("No checks hit"));
                   },
                 ),
                 SizedBox(height: 20),

@@ -94,9 +94,3 @@ class MainContent extends StatelessWidget {
     );
   }
 }
-
-void main() {
-  runApp(MaterialApp(
-    home: DashboardScreen(),
-  ));
-}

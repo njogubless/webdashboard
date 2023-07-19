@@ -201,13 +201,3 @@ class _AdminHomePageState extends State<AdminHomePage> {
     }
   }
 }
-
-void main() {
-  runApp(MaterialApp(
-    title: 'Admin Interface',
-    theme: ThemeData(
-      primarySwatch: Colors.blue,
-    ),
-    home: AdminHomePage(),
-  ));
-}

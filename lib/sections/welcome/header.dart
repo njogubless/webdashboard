@@ -25,7 +25,7 @@ class Header extends StatelessWidget {
                   size: 30,
                   color: Colors.white,
                 ),
-                onPressed: context.read<MenuController>().controlMenu,
+                onPressed:()=> context.read<MenuController>(),
               ),
             if (!Responsive.isMobile(context))
               Text(

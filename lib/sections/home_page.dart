@@ -25,7 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 0:
         return WelcomeSection(switchPage: switchToSection);
       case 1:
-        return const VerifyUsers();
+        return ApprovedUsersPage();
       case 2:
         return const AddEvents();
       case 3:
@@ -98,6 +98,138 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           Flexible(flex: 7, child: _showSection(_selectedIndex)),
+        ],
+      ),
+    );
+  }
+}
+
+class HomeNavigation extends StatefulWidget {
+  const HomeNavigation({super.key});
+
+  @override
+  State<HomeNavigation> createState() => _HomeNavigationState();
+}
+
+class _HomeNavigationState extends State<HomeNavigation> {
+  int _selectedIndex = 0;
+
+  void switchToSection(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  Widget _showSection(int index) {
+    switch (index) {
+      case 0:
+        return WelcomeSection(switchPage: switchToSection);
+      case 1:
+        return ApprovedUsersPage();
+      case 2:
+        return const AddEvents();
+      case 3:
+        return const ManageEvents();
+      case 4:
+        return const BookedEvents();
+      default:
+        AuthService().signOut();
+        return const Center();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Row(
+        children: [
+          Flexible(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  //HOME
+                  ListTile(
+                    leading: Icon(Icons.home),
+                    title: const Text('Home'),
+                    onTap: () => switchToSection(0),
+                  ),
+                  ExpansionTile(
+                    title: const Text('Clients'),
+                    children: [
+                      ListTile(
+                        title: const Text('Approved'),
+                        onTap: () => switchToSection(1),
+                      ),
+                      ListTile(
+                        title: const Text('Pending'),
+                        onTap: () {
+                          // Handle Option 2
+                        },
+                      ),
+                      ListTile(
+                        title: const Text('Rejected'),
+                        onTap: () {
+                          // Handle Option 3
+                        },
+                      ),
+                    ],
+                  ),
+                  ExpansionTile(
+                    leading: Icon(Icons.person_outline),
+                    title: const Text('Employees'),
+                    children: [
+                      ListTile(
+                        title: const Text('Approved'),
+                        onTap: () => switchToSection(2),
+                      ),
+                      ListTile(
+                        title: const Text('Pending'),
+                        onTap: () {
+                          // Handle Option 2
+                        },
+                      ),
+                      ListTile(
+                        title: const Text('Rejected'),
+                        onTap: () {
+                          // Handle Option 3
+                        },
+                      ),
+                    ],
+                  ),
+                  ListTile(
+                    title: const Text('Finance Manager'),
+                    onTap: () => switchToSection(3),
+                  ),
+                  ListTile(
+                    title: const Text('Events Manager'),
+                    onTap: () => switchToSection(3),
+                  ),
+                  ListTile(
+                    title: const Text('Settings'),
+                    onTap: () => switchToSection(3),
+                  ),
+
+                  ListTile(
+                    title: const Text(
+                      'Logout',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    leading: const Icon(
+                      Icons.logout_rounded,
+                      color: Colors.red,
+                    ),
+                    onTap: () {
+                      AuthService().signOut();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 5,
+            child: _showSection(_selectedIndex),
+          ),
         ],
       ),
     );

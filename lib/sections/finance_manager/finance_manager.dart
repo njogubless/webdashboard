@@ -106,6 +106,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           NavigationRail(
             destinations: [
               NavigationRailDestination(
+                icon: Icon(Icons.person_outline),
                 label: Text('Finance Manager'),
               ),
             ],

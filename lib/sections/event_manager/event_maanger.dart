@@ -86,6 +86,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           NavigationRail(
             destinations: [
               NavigationRailDestination(
+                icon: Icon(Icons.person),
                 label: Text('Event Manager'),
               ),
             ],
@@ -102,14 +103,4 @@ class _AdminHomePageState extends State<AdminHomePage> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    title: 'Admin Interface',
-    theme: ThemeData(
-      primarySwatch: Colors.blue,
-    ),
-    home: AdminHomePage(),
-  ));
 }
