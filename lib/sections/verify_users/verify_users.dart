@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
-enum UserStatus { approved, pending, rejected }
+import '../../services/database.dart';
+
+enum UserStatus { Verified, pending, Rejected }
 
 class FirebaseUser {
   final String name;
@@ -22,6 +23,7 @@ class AuthNotifier with ChangeNotifier {
 
   Future<void> fetchUsers() async {
     final dataSnapshot = await _database.child('users').once();
+    print(dataSnapshot);
 
     if (dataSnapshot.value != null) {
       final usersMap = dataSnapshot.value as Map<dynamic, dynamic>;
@@ -44,13 +46,13 @@ class AuthNotifier with ChangeNotifier {
         );
 
         switch (firebaseUser.status) {
-          case UserStatus.approved:
+          case UserStatus.Verified:
             approvedUsers.add(firebaseUser);
             break;
           case UserStatus.pending:
             pendingUsers.add(firebaseUser);
             break;
-          case UserStatus.rejected:
+          case UserStatus.Rejected:
             rejectedUsers.add(firebaseUser);
             break;
         }
@@ -63,13 +65,13 @@ class AuthNotifier with ChangeNotifier {
   UserStatus _getUserStatus(String status) {
     switch (status) {
       case 'approved':
-        return UserStatus.approved;
+        return UserStatus.Verified;
       case 'pending':
         return UserStatus.pending;
       case 'rejected':
-        return UserStatus.rejected;
+        return UserStatus.Rejected;
       default:
-        return UserStatus.approved;
+        return UserStatus.Verified;
     }
   }
 }
@@ -79,23 +81,24 @@ class ApprovedUsersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final authNotifier = Provider.of<AuthNotifier>(context);
     final approvedUsers = authNotifier.approvedUsers;
-
+    print('Approved Users $approvedUsers');
     return Scaffold(
       appBar: AppBar(
         title: Text('Approved Users'),
       ),
-      body: ListView.builder(
-        itemCount: approvedUsers.length,
-        itemBuilder: (context, index) {
-          final user = approvedUsers[index];
+      //body: ListView.builder(
+      // itemCount: approvedUsers.length,
+      //itemBuilder: (context, index) {
+      //final user = approvedUsers[index];
 
-          return ListTile(
-            title: Text(user.name),
-            subtitle: Text(user.email),
-            // Add any additional user details you want to display
-          );
-        },
-      ),
+      // return ListTile(
+      //title: Text(user.name),
+      //subtitle: Text(user.email),
+      // Add any additional user details you want to display
+      //);
+      // },
+      //),
+      body: Text('Approved Users'),
     );
   }
 }

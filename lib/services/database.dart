@@ -7,6 +7,8 @@ class Database {
   // Initialize Firestore
   static final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  static var instance;
+
   // Save registered client data
   static Future<void> saveClientData(Client client) async {
     final DocumentReference docRef = firestore.collection('clients').doc();
