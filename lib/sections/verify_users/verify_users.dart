@@ -76,29 +76,33 @@ class AuthNotifier with ChangeNotifier {
   }
 }
 
-class ApprovedUsersPage extends StatelessWidget {
+class ApprovedUsersPage extends StatefulWidget {
+  @override
+  _ApprovedUsersPageState createState() => _ApprovedUsersPageState();
+}
+
+class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
   @override
   Widget build(BuildContext context) {
     final authNotifier = Provider.of<AuthNotifier>(context);
     final approvedUsers = authNotifier.approvedUsers;
     print('Approved Users $approvedUsers');
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Approved Users'),
       ),
-      //body: ListView.builder(
-      // itemCount: approvedUsers.length,
-      //itemBuilder: (context, index) {
-      //final user = approvedUsers[index];
-
-      // return ListTile(
-      //title: Text(user.name),
-      //subtitle: Text(user.email),
-      // Add any additional user details you want to display
-      //);
-      // },
-      //),
-      body: Text('Approved Users'),
+      body: ListView.builder(
+        itemCount: approvedUsers.length,
+        itemBuilder: (context, index) {
+          final user = approvedUsers[index];
+          return ListTile(
+            title: Text(user.name),
+            subtitle: Text(user.email),
+            // Add any additional user details you want to display
+          );
+        },
+      ),
     );
   }
 }

@@ -20,6 +20,8 @@ dependencies:
   responsive_builder: ^0.7.0
   flutter_svg: ^2.0.7
   mpesa_flutter_plugin: ^1.6.1
+  feature_folder_cli: ^0.3.0
+  sidebarx: ^0.16.1
 
 dev_dependencies:
   flutter_test:

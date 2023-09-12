@@ -90,7 +90,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 label: Text('Event Manager'),
               ),
             ],
-            selectedIndex: 0,
+            selectedIndex: 1,
             onDestinationSelected: (int index) {
               _onMenuItemSelected('Event Manager');
             },

@@ -169,15 +169,12 @@ class _HomeNavigationState extends State<HomeNavigation> {
                       ),
                       ListTile(
                         title: const Text('Pending'),
-                        onTap: () {
-                          // Handle Option 2
-                        },
+                        onTap: () => switchToSection(2),
+                        
                       ),
                       ListTile(
                         title: const Text('Rejected'),
-                        onTap: () {
-                          // Handle Option 3
-                        },
+                        onTap: () => switchToSection(3),
                       ),
                     ],
                   ),
@@ -187,36 +184,34 @@ class _HomeNavigationState extends State<HomeNavigation> {
                     children: [
                       ListTile(
                         title: const Text('Approved'),
-                        onTap: () => switchToSection(2),
+                        onTap: () => switchToSection(4),
+                        
                       ),
                       ListTile(
                         title: const Text('Pending'),
-                        onTap: () {
-                          // Handle Option 2
-                        },
+                        onTap: () => switchToSection(5),
                       ),
                       ListTile(
                         title: const Text('Rejected'),
-                        onTap: () {
-                          // Handle Option 3
-                        },
+                        onTap: () => switchToSection(6),
                       ),
                     ],
                   ),
                   ListTile(
                     leading:Icon(Icons.person_2_rounded) ,
                     title: const Text('Event Manager'),
-                    onTap: () => switchToSection(3),
+                    onTap: () => switchToSection(7),
+                    
                   ),
                   ListTile(
                     leading: Icon(Icons.person_2_sharp),
                     title: const Text('Finance Manager'),
-                    onTap: () => switchToSection(3),
+                    onTap: () => switchToSection(8),
                   ),
                   ListTile(
                     leading:Icon(Icons.settings) ,
                     title: const Text('Settings'),
-                    onTap: () => switchToSection(3),
+                    onTap: () => switchToSection(9),
                   ),
 
                   ListTile(
