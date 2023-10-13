@@ -12,7 +12,16 @@ class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Approved Users'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Approved Users',
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            fontSize: 30,
+            color: Colors.indigo,
+          ),
+        ),
       ),
       body: FutureBuilder<List<Client>>(
         future: Database.getApprovedClients(),
@@ -41,7 +50,16 @@ class PendingUsersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pending Users'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Pending Users',
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            fontSize: 30,
+            color: Colors.indigo,
+          ),
+        ),
       ),
       body: FutureBuilder<List<Client>>(
         future: Database.getPendingClients(),
@@ -70,7 +88,16 @@ class RejectedUsersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Rejected Users'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Rejected Users',
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            fontSize: 30,
+            color: Colors.indigo,
+          ),
+        ),
       ),
       body: FutureBuilder<List<Client>>(
         future: Database.getRejectedClients(),
