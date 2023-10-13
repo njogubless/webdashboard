@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class BookingScreen extends StatefulWidget {
   @override
   _BookingScreenState createState() => _BookingScreenState();
@@ -92,7 +91,6 @@ class ReceiptScreen extends StatelessWidget {
             ),
             SizedBox(height: 8.0),
             // Add payment details here
-            
           ],
         ),
       ),
@@ -116,7 +114,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => BookingScreen(),
         '/receipt': (context) => ReceiptScreen(
-              bookingDetails: ModalRoute.of(context)!.settings.arguments as String,
+              bookingDetails:
+                  ModalRoute.of(context)!.settings.arguments as String,
             ),
       },
     );
@@ -156,7 +155,8 @@ class Receiptscreen extends StatelessWidget {
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
-                String receiptUrl = 'http://example.com/receipt.pdf'; // Replace with your receipt URL
+                String receiptUrl =
+                    'http://example.com/receipt.pdf'; // Replace with your receipt URL
                 if (await canLaunchUrl(receiptUrl as Uri)) {
                   await canLaunchUrl(receiptUrl as Uri);
                 } else {

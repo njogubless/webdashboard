@@ -104,8 +104,32 @@ class Database {
         .toList();
   }
 
+  // Retrieve approved clients
+  static Future<List<Client>> getApprovedClients() async {
+    final QuerySnapshot querySnapshot = await firestore
+        .collection('clients')
+        .where('status', isEqualTo: 'Verified')
+        .get();
+    final List<QueryDocumentSnapshot> docs = querySnapshot.docs;
+    return docs
+        .map((doc) => Client.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+  }
+
+  // Retrieve approved clients
+  static Future<List<Client>> getRejectedClients() async {
+    final QuerySnapshot querySnapshot = await firestore
+        .collection('clients')
+        .where('status', isEqualTo: 'Rejected')
+        .get();
+    final List<QueryDocumentSnapshot> docs = querySnapshot.docs;
+    return docs
+        .map((doc) => Client.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+  }
+
   // Retrieve pending clients
-  static Future<void> verifyser(Client client) async {
+  static Future<void> verifyUser(Client client) async {
     final QuerySnapshot querySnapshot = await firestore
         .collection('clients')
         .where('clientEmail', isEqualTo: client.clientEmail)

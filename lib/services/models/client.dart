@@ -15,8 +15,6 @@ class Client {
     this.status = 'Pending',
   });
 
-
-
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'uid': uid,
@@ -39,14 +37,13 @@ class Client {
 
   String toJson() => json.encode(toMap());
 
- factory Client.fromJson(Map<String, dynamic> map) {
-  return Client(
-    uid: map['uid'] != null ? map['uid'] as String : null,
-    clientName: map['clientName'] as String,
-    clientEmail: map['clientEmail'] as String,
-    role: map['role'] as String,
-    status: map['status'] != null ? map['status'] as String : null,
-  );
-}
-
+  factory Client.fromJson(Map<String, dynamic> map) {
+    return Client(
+      uid: map['uid'] != null ? map['uid'] as String : null,
+      clientName: map['clientName'] as String,
+      clientEmail: map['clientEmail'] as String,
+      role: map['role'] as String,
+      status: map['status'] != null ? map['status'] as String : null,
+    );
+  }
 }

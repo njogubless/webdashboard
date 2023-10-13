@@ -1,4 +1,3 @@
-// TODO Implement this library.
 import 'package:flutter/material.dart';
 
 const primaryColor = Color(0xFFec1b34);
@@ -7,8 +6,7 @@ const bgColor = Color(0xFFecf0f5);
 
 const defaultPadding = 20.0;
 
-// ignore: prefer_const_constructors
-final TextStyle mainTitle = TextStyle(
+final TextStyle mainTitle = const TextStyle(
   fontSize: 26.0,
   fontWeight: FontWeight.bold,
   color: Colors.black,
