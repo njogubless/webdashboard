@@ -9,7 +9,7 @@ class WelcomeSection extends StatefulWidget {
     required this.switchPage,
   });
 
-  final Function(int index) switchPage;
+  final Function(int index, bool isClient) switchPage;
 
   @override
   State<WelcomeSection> createState() => _WelcomeSectionState();
@@ -120,7 +120,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                 children: [
                   SizedBox(height: 150),
                   MaterialButton(
-                    onPressed: () => widget.switchPage(1),
+                    onPressed: () => widget.switchPage(2, true),
                     color: Colors.blue,
                     elevation: 3.0,
                     child: const Center(
@@ -135,7 +135,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                   ),
                   SizedBox(height: 20),
                   MaterialButton(
-                    onPressed: () => widget.switchPage(2),
+                    onPressed: () => widget.switchPage(5, true),
                     color: Colors.blue,
                     elevation: 3.0,
                     child: const Center(
@@ -150,7 +150,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                   ),
                   SizedBox(height: 20),
                   MaterialButton(
-                    onPressed: () => widget.switchPage(3),
+                    onPressed: () => widget.switchPage(6, true),
                     color: Colors.blue,
                     elevation: 3.0,
                     child: const Center(
@@ -165,7 +165,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                   ),
                   SizedBox(height: 20),
                   MaterialButton(
-                    onPressed: () => widget.switchPage(4),
+                    onPressed: () => widget.switchPage(7, true),
                     color: Colors.blue,
                     elevation: 3.0,
                     child: const Center(

@@ -15,10 +15,12 @@ class HomeNavigation extends StatefulWidget {
 
 class _HomeNavigationState extends State<HomeNavigation> {
   int _selectedIndex = 0;
+  bool _isClient = false;
 
-  void switchToSection(int index) {
+  void switchToSection(int index, bool isClient) {
     setState(() {
       _selectedIndex = index;
+      _isClient = isClient;
     });
   }
 
@@ -27,13 +29,21 @@ class _HomeNavigationState extends State<HomeNavigation> {
       case 0:
         return WelcomeSection(switchPage: switchToSection);
       case 1:
-        return ApprovedUsersPage();
+        return ApprovedUsersPage(
+          isClient: _isClient,
+        );
       case 2:
-        return PendingUsersPage();
+        return PendingUsersPage(
+          isClient: _isClient,
+        );
       case 3:
-        return RejectedUsersPage();
+        return RejectedUsersPage(
+          isClient: _isClient,
+        );
       case 4:
-        return ApprovedUsersPage();
+        return ApprovedUsersPage(
+          isClient: _isClient,
+        );
       case 5:
         return const AddEvents();
       case 6:
@@ -59,7 +69,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
                   ListTile(
                     leading: Icon(Icons.home),
                     title: const Text('Home'),
-                    onTap: () => switchToSection(0),
+                    onTap: () => switchToSection(0, false),
                   ),
                   ExpansionTile(
                     leading: Icon(Icons.person_2_outlined),
@@ -67,15 +77,15 @@ class _HomeNavigationState extends State<HomeNavigation> {
                     children: [
                       ListTile(
                         title: const Text('Approved'),
-                        onTap: () => switchToSection(1),
+                        onTap: () => switchToSection(1, true),
                       ),
                       ListTile(
                         title: const Text('Pending'),
-                        onTap: () => switchToSection(2),
+                        onTap: () => switchToSection(2, true),
                       ),
                       ListTile(
                         title: const Text('Rejected'),
-                        onTap: () => switchToSection(3),
+                        onTap: () => switchToSection(3, true),
                       ),
                     ],
                   ),
@@ -85,27 +95,27 @@ class _HomeNavigationState extends State<HomeNavigation> {
                     children: [
                       ListTile(
                         title: const Text('Approved'),
-                        onTap: () => switchToSection(1),
+                        onTap: () => switchToSection(1, false),
                       ),
                       ListTile(
                         title: const Text('Pending'),
-                        onTap: () => switchToSection(2),
+                        onTap: () => switchToSection(2, false),
                       ),
                       ListTile(
                         title: const Text('Rejected'),
-                        onTap: () => switchToSection(3),
+                        onTap: () => switchToSection(3, false),
                       ),
                     ],
                   ),
                   ListTile(
                     leading: Icon(Icons.person_2_rounded),
                     title: const Text('Event Manager'),
-                    onTap: () => switchToSection(6),
+                    onTap: () => switchToSection(6, false),
                   ),
                   ListTile(
                     leading: Icon(Icons.person_2_sharp),
                     title: const Text('Finance Manager'),
-                    onTap: () => switchToSection(7),
+                    onTap: () => switchToSection(7, false),
                   ),
                   // ListTile(
                   //   leading: Icon(Icons.settings),

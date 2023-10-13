@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/client.dart';
 
-class ApprovedUsersPage extends StatefulWidget {
-  @override
-  _ApprovedUsersPageState createState() => _ApprovedUsersPageState();
-}
-
-class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
+class ApprovedUsersPage extends StatelessWidget {
+  const ApprovedUsersPage({
+    required this.isClient,
+    super.key,
+  });
+  final bool isClient;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +27,11 @@ class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
         future: Database.getApprovedClients(),
         initialData: [],
         builder: (context, snapshot) {
-          final approvedUsers = snapshot.data!;
+          final approvedUsers = snapshot.data!
+              .where((element) => isClient
+                  ? element.role == 'client'
+                  : element.role != 'client')
+              .toList();
           return ListView.builder(
             itemCount: approvedUsers.length,
             itemBuilder: (context, index) {
@@ -46,6 +50,12 @@ class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
 }
 
 class PendingUsersPage extends StatelessWidget {
+  const PendingUsersPage({
+    required this.isClient,
+    super.key,
+  });
+
+  final bool isClient;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +75,11 @@ class PendingUsersPage extends StatelessWidget {
         future: Database.getPendingClients(),
         initialData: [],
         builder: (context, snapshot) {
-          final pendingUsers = snapshot.data!;
+          final pendingUsers = snapshot.data!
+              .where((element) => isClient
+                  ? element.role == 'client'
+                  : element.role != 'client')
+              .toList();
           return ListView.builder(
             itemCount: pendingUsers.length,
             itemBuilder: (context, index) {
@@ -84,6 +98,12 @@ class PendingUsersPage extends StatelessWidget {
 }
 
 class RejectedUsersPage extends StatelessWidget {
+  const RejectedUsersPage({
+    required this.isClient,
+    super.key,
+  });
+
+  final bool isClient;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +123,11 @@ class RejectedUsersPage extends StatelessWidget {
         future: Database.getRejectedClients(),
         initialData: [],
         builder: (context, snapshot) {
-          final rejectedUsers = snapshot.data!;
+          final rejectedUsers = snapshot.data!
+              .where((element) => isClient
+                  ? element.role == 'client'
+                  : element.role != 'client')
+              .toList();
           return ListView.builder(
             itemCount: rejectedUsers.length,
             itemBuilder: (context, index) {
