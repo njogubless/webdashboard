@@ -32,17 +32,31 @@ class ApprovedUsersPage extends StatelessWidget {
                   ? element.role == 'client'
                   : element.role != 'client')
               .toList();
-          return ListView.builder(
-            itemCount: approvedUsers.length,
-            itemBuilder: (context, index) {
-              final user = approvedUsers[index];
-              return ListTile(
-                title: Text(user.clientName),
-                subtitle: Text(user.clientEmail),
-                // Add any additional user details you want to display
-              );
-            },
-          );
+          return approvedUsers.isEmpty
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 70),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 18),
+                      child: Text(
+                        'No approved users',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ],
+                )
+              : ListView.builder(
+                  itemCount: approvedUsers.length,
+                  itemBuilder: (context, index) {
+                    final user = approvedUsers[index];
+                    return ListTile(
+                      title: Text(user.clientName),
+                      subtitle: Text(user.clientEmail),
+                      // Add any additional user details you want to display
+                    );
+                  },
+                );
         },
       ),
     );
@@ -80,17 +94,31 @@ class PendingUsersPage extends StatelessWidget {
                   ? element.role == 'client'
                   : element.role != 'client')
               .toList();
-          return ListView.builder(
-            itemCount: pendingUsers.length,
-            itemBuilder: (context, index) {
-              final user = pendingUsers[index];
-              return ListTile(
-                title: Text(user.clientName),
-                subtitle: Text(user.clientEmail),
-                // Add any additional user details you want to display
-              );
-            },
-          );
+          return pendingUsers.isEmpty
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 70),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 18),
+                      child: Text(
+                        'No pending users',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ],
+                )
+              : ListView.builder(
+                  itemCount: pendingUsers.length,
+                  itemBuilder: (context, index) {
+                    final user = pendingUsers[index];
+                    return ListTile(
+                      title: Text(user.clientName),
+                      subtitle: Text(user.clientEmail),
+                      // Add any additional user details you want to display
+                    );
+                  },
+                );
         },
       ),
     );
@@ -128,17 +156,31 @@ class RejectedUsersPage extends StatelessWidget {
                   ? element.role == 'client'
                   : element.role != 'client')
               .toList();
-          return ListView.builder(
-            itemCount: rejectedUsers.length,
-            itemBuilder: (context, index) {
-              final user = rejectedUsers[index];
-              return ListTile(
-                title: Text(user.clientName),
-                subtitle: Text(user.clientEmail),
-                // Add any additional user details you want to display
-              );
-            },
-          );
+          return rejectedUsers.isEmpty
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 70),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 18),
+                      child: Text(
+                        'No rejected users',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ],
+                )
+              : ListView.builder(
+                  itemCount: rejectedUsers.length,
+                  itemBuilder: (context, index) {
+                    final user = rejectedUsers[index];
+                    return ListTile(
+                      title: Text(user.clientName),
+                      subtitle: Text(user.clientEmail),
+                      // Add any additional user details you want to display
+                    );
+                  },
+                );
         },
       ),
     );
