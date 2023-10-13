@@ -7,8 +7,8 @@ class SavedEvent {
   });
   factory SavedEvent.fromJson(Map<String, dynamic> savedEvent) {
     return SavedEvent(
-      clientID: savedEvent['clientID'],
-      eventID: savedEvent['eventID'],
+      clientID: savedEvent['clientID'] ?? '',
+      eventID: savedEvent['eventID'] ?? '',
     );
   }
 

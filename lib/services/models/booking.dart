@@ -10,9 +10,9 @@ class Booking {
 
   factory Booking.fromJson(Map<String, dynamic> booking) {
     return Booking(
-      userEmail: booking['userEmail'],
-      eventID: booking['eventID'],
-      bookingDate: booking['bookingDate'],
+      userEmail: booking['userEmail'] ?? '',
+      eventID: booking['eventID'] ?? '',
+      bookingDate: booking['bookingDate'] ?? '',
     );
   }
 

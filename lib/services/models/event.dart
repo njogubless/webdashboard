@@ -18,13 +18,13 @@ class Event {
 
   factory Event.fromJson(Map<String, dynamic> event) {
     return Event(
-      eventID: event['eventID'],
-      eventName: event['eventName'],
-      eventDate: event['eventDate'],
-      eventTime: event['eventTime'],
-      eventCost: event['eventCost'],
-      eventLocation: event['eventLocation'],
-      eventImageUrl: event['eventImageUrl'],
+      eventID: event['eventID'] ?? '',
+      eventName: event['eventName'] ?? '',
+      eventDate: event['eventDate'] ?? '',
+      eventTime: event['eventTime'] ?? '',
+      eventCost: event['eventCost'] ?? '',
+      eventLocation: event['eventLocation'] ?? '',
+      eventImageUrl: event['eventImageUrl'] ?? '',
     );
   }
 
