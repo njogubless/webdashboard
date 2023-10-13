@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:hikers_dash/services/models/booking.dart';
 import 'package:hikers_dash/services/models/client.dart';
 import 'package:hikers_dash/services/models/event.dart';
@@ -61,10 +62,17 @@ class Database {
         .toList();
     List<BookedEventItem> bookedEvents = [];
     for (final booking in bookings) {
-      final user =
-          users.where((user) => user.clientEmail == booking.userEmail).first;
+      final user = users
+          .firstWhereOrNull((user) => user.clientEmail == booking.userEmail);
       final event =
-          events.where((event) => event.eventID == booking.eventID).first;
+          events.firstWhereOrNull((event) => event.eventID == booking.eventID);
+      // Fix breaking error
+      if (event == null) {
+        continue;
+      }
+      if (user == null) {
+        continue;
+      }
       bookedEvents.add(BookedEventItem(
         userEmail: user.clientEmail,
         userName: user.clientName,
