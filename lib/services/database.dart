@@ -142,7 +142,14 @@ class Database {
         .collection('clients')
         .where('clientEmail', isEqualTo: client.clientEmail)
         .get();
-    await querySnapshot.docs.first.reference.update({'status': 'Verified'});
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final clientDocument = querySnapshot.docs.first;
+      await clientDocument.reference.update({'status': 'Verified'});
+    } else {
+      throw Exception('Client not found');
+    }
+    //await querySnapshot.docs.first.reference.update({'status': 'Verified'});
   }
 
   // Retrieve pending clients
@@ -152,7 +159,14 @@ class Database {
         .where('status', isEqualTo: 'Verified')
         .where('clientEmail', isEqualTo: client.clientEmail)
         .get();
-    await querySnapshot.docs.first.reference.update({'status': 'Rejected'});
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final clientDocument = querySnapshot.docs.first;
+      await clientDocument.reference.update({'status': 'verified'});
+    } else {
+      throw Exception('Client not found');
+    }
+    //await querySnapshot.docs.first.reference.update({'status': 'Rejected'});
   }
 
   // Retrieve pending clients

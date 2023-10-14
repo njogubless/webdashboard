@@ -22,7 +22,7 @@ dependencies:
   mpesa_flutter_plugin: ^1.6.1
   feature_folder_cli: ^0.3.0
   sidebarx: ^0.16.1
-  collection: ^1.17.2
+  collection: ^1.17.1
 
 dev_dependencies:
   flutter_test:

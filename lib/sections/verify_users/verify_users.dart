@@ -70,6 +70,19 @@ class PendingUsersPage extends StatelessWidget {
   });
 
   final bool isClient;
+
+  // Function to approve a client
+  void approveClient(Client client) {
+    // Call the approveClient function from the database class
+    Database.verifyUser(client).then((_) {
+      // Handle UI updates or refresh here
+      // setState can be used here
+    }).catchError((error) {
+      // Handle errors
+      print('Error approving client: $error');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,6 +129,12 @@ class PendingUsersPage extends StatelessWidget {
                       title: Text(user.clientName),
                       subtitle: Text(user.clientEmail),
                       // Add any additional user details you want to display
+                      trailing: IconButton(
+                        icon: const Icon(Icons.check),
+                        onPressed: () {
+                          approveClient(user);
+                        },
+                      ),
                     );
                   },
                 );
@@ -125,6 +144,7 @@ class PendingUsersPage extends StatelessWidget {
   }
 }
 
+
 class RejectedUsersPage extends StatelessWidget {
   const RejectedUsersPage({
     required this.isClient,
@@ -132,6 +152,21 @@ class RejectedUsersPage extends StatelessWidget {
   });
 
   final bool isClient;
+
+  // Function to approve a rejected client
+  void approveRejectedClient(Client client) {
+    // Call a function from your Database class to change the status
+    // from 'Rejected' to 'Verified' or another appropriate status.
+    Database.revokeUser(client)
+      .then((_) {
+        // Handle UI updates or refresh here
+        // You can use setState or another state management solution
+      })
+      .catchError((error) {
+        // Handle errors
+        print('Error approving rejected client: $error');
+      });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
