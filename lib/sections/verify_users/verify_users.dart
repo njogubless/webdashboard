@@ -5,9 +5,29 @@ import 'package:hikers_dash/services/models/client.dart';
 class ApprovedUsersPage extends StatelessWidget {
   const ApprovedUsersPage({
     required this.isClient,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
+
   final bool isClient;
+
+  // Function to build the table rows
+  Widget buildTable(List<Client> users) {
+    return DataTable(
+      columns: [
+        DataColumn(label: Text('Name')),
+        DataColumn(label: Text('Email')),
+        DataColumn(label: Text('Role')),
+      ],
+      rows: users.map((user) {
+        return DataRow(cells: [
+          DataCell(Text(user.clientName)), // Display Name
+          DataCell(Text(user.clientEmail)), // Display Email
+          DataCell(Text(user.role)), // Display Role
+        ]);
+      }).toList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,16 +66,11 @@ class ApprovedUsersPage extends StatelessWidget {
                     ),
                   ],
                 )
-              : ListView.builder(
-                  itemCount: approvedUsers.length,
-                  itemBuilder: (context, index) {
-                    final user = approvedUsers[index];
-                    return ListTile(
-                      title: Text(user.clientName),
-                      subtitle: Text(user.clientEmail),
-                      // Add any additional user details you want to display
-                    );
-                  },
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: buildTable(approvedUsers),
+                  ),
                 );
         },
       ),
@@ -66,22 +81,68 @@ class ApprovedUsersPage extends StatelessWidget {
 class PendingUsersPage extends StatelessWidget {
   const PendingUsersPage({
     required this.isClient,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final bool isClient;
 
-  // Function to approve a client
+//function to approve a client
   void approveClient(Client client) {
-    // Call the approveClient function from the database class
     Database.verifyUser(client).then((_) {
       // Handle UI updates or refresh here
-      // setState can be used here
+      // You can use setState or another state management solution
     }).catchError((error) {
       // Handle errors
       print('Error approving client: $error');
     });
   }
+
+//function to reject a client
+
+  void rejectclient(Client client) {
+    //call a function from the database to change the satus
+    //from 'pending' to 'rejected'
+    Database.rejectClient(client).then((_) {
+      //handle UI updates or refresh here
+    }).catchError((error) {
+      print('Error rejecting client: $error');
+    });
+  }
+
+  // Function to build the table rows
+Widget buildTable(List<Client> users) {
+  return DataTable(
+    columns: [
+      DataColumn(label: Text('Name')),
+      DataColumn(label: Text('Email')),
+      DataColumn(label: Text('Role')),
+      DataColumn(label: Text('Action')),
+    ],
+    rows: users.map((user) {
+      return DataRow(cells: [
+        DataCell(Text(user.clientName)), // Display Name
+        DataCell(Text(user.clientEmail)), // Display Email
+        DataCell(Text(user.role)), // Display Role
+        DataCell(Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.check), // Action to verify user
+              onPressed: () {
+                approveClient(user); // Call your approval function
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.close), // Action to reject user
+              onPressed: () {
+                rejectclient(user); // Call your rejection function
+              },
+            ),
+          ],
+        )),
+      ]);
+    }).toList(),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -121,22 +182,11 @@ class PendingUsersPage extends StatelessWidget {
                     ),
                   ],
                 )
-              : ListView.builder(
-                  itemCount: pendingUsers.length,
-                  itemBuilder: (context, index) {
-                    final user = pendingUsers[index];
-                    return ListTile(
-                      title: Text(user.clientName),
-                      subtitle: Text(user.clientEmail),
-                      // Add any additional user details you want to display
-                      trailing: IconButton(
-                        icon: const Icon(Icons.check),
-                        onPressed: () {
-                          approveClient(user);
-                        },
-                      ),
-                    );
-                  },
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: buildTable(pendingUsers),
+                  ),
                 );
         },
       ),
@@ -144,29 +194,49 @@ class PendingUsersPage extends StatelessWidget {
   }
 }
 
-
 class RejectedUsersPage extends StatelessWidget {
   const RejectedUsersPage({
     required this.isClient,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final bool isClient;
 
-  // Function to approve a rejected client
   void approveRejectedClient(Client client) {
-    // Call a function from your Database class to change the status
-    // from 'Rejected' to 'Verified' or another appropriate status.
-    Database.revokeUser(client)
-      .then((_) {
-        // Handle UI updates or refresh here
-        // You can use setState or another state management solution
-      })
-      .catchError((error) {
-        // Handle errors
-        print('Error approving rejected client: $error');
-      });
+    Database.approveRejectedClient(client).then((_) {
+      // Handle UI updates or refresh here
+      // You can use setState or another state management solution
+    }).catchError((error) {
+      // Handle errors
+      print('Error approving rejected client: $error');
+    });
   }
+
+  // Function to build the table rows
+  Widget buildTable(List<Client> users) {
+    return DataTable(
+      columns: [
+        DataColumn(label: Text('Name')),
+        DataColumn(label: Text('Email')),
+        DataColumn(label: Text('Role')),
+        DataColumn(label: Text('Action')),
+      ],
+      rows: users.map((user) {
+        return DataRow(cells: [
+          DataCell(Text(user.clientName)), // Display Name
+          DataCell(Text(user.clientEmail)), // Display Email
+          DataCell(Text(user.role)), // Display Role
+          DataCell(IconButton(
+            icon: Icon(Icons.check), // Action to verify user
+            onPressed: () {
+              approveRejectedClient(user); // Call your approval function
+            },
+          )),
+        ]);
+      }).toList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,16 +275,11 @@ class RejectedUsersPage extends StatelessWidget {
                     ),
                   ],
                 )
-              : ListView.builder(
-                  itemCount: rejectedUsers.length,
-                  itemBuilder: (context, index) {
-                    final user = rejectedUsers[index];
-                    return ListTile(
-                      title: Text(user.clientName),
-                      subtitle: Text(user.clientEmail),
-                      // Add any additional user details you want to display
-                    );
-                  },
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: buildTable(rejectedUsers),
+                  ),
                 );
         },
       ),

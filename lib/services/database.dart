@@ -159,15 +159,40 @@ class Database {
         .where('status', isEqualTo: 'Verified')
         .where('clientEmail', isEqualTo: client.clientEmail)
         .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      final clientDocument = querySnapshot.docs.first;
-      await clientDocument.reference.update({'status': 'verified'});
-    } else {
-      throw Exception('Client not found');
-    }
-    //await querySnapshot.docs.first.reference.update({'status': 'Rejected'});
+    await querySnapshot.docs.first.reference.update({'status': 'Rejected'});
   }
+
+  //aproving rejected users
+static Future<void> approveRejectedClient(Client client) async {
+  final QuerySnapshot querySnapshot = await firestore
+      .collection('clients')
+      .where('clientEmail', isEqualTo: client.clientEmail)
+      .get();
+
+  if (querySnapshot.docs.isNotEmpty) {
+    final clientDocument = querySnapshot.docs.first;
+    await clientDocument.reference.update({'status': 'Verified'});
+  } else {
+    throw Exception('Client not found');
+  }
+}
+
+//reject user verification
+// Add this method to your Database class
+static Future<void> rejectClient(Client client) async {
+  final QuerySnapshot querySnapshot = await firestore
+      .collection('clients')
+      .where('clientEmail', isEqualTo: client.clientEmail)
+      .get();
+
+  if (querySnapshot.docs.isNotEmpty) {
+    final clientDocument = querySnapshot.docs.first;
+    await clientDocument.reference.update({'status': 'Rejected'});
+  } else {
+    throw Exception('Client not found');
+  }
+}
+
 
   // Retrieve pending clients
   static Future<void> deleteEvent(Event event) async {
