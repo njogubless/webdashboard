@@ -143,7 +143,6 @@ Widget buildTable(List<Client> users) {
     }).toList(),
   );
 }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
