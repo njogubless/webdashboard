@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hikers_dash/sections/booked_events/booked_events.dart';
 import 'package:hikers_dash/sections/add_events/add_events.dart';
 import 'package:hikers_dash/sections/manage_events/manage_events.dart';
+import 'package:hikers_dash/sections/ratings/ratings.dart';
 import 'package:hikers_dash/sections/settings/settings.dart';
 import 'package:hikers_dash/sections/verify_users/verify_users.dart';
 import 'package:hikers_dash/sections/welcome/welcome.dart';
@@ -52,6 +53,8 @@ class _HomeNavigationState extends State<HomeNavigation> {
       case 7:
         return const BookedEvents();
       case 8:
+        return const RatingsPage();
+      case 9:
         return const SettingsPage();
       default:
         AuthService().signOut();
@@ -119,11 +122,15 @@ class _HomeNavigationState extends State<HomeNavigation> {
                     leading: Icon(Icons.person_2_sharp),
                     title: const Text('Finance Manager'),
                     onTap: () => switchToSection(7, false),
+                  ),ListTile(
+                    leading: Icon(Icons.star),
+                    title: const Text('Ratings'),
+                    onTap: () => switchToSection(8,false),
                   ),
                   ListTile(
                     leading: Icon(Icons.settings),
                     title: const Text('Settings'),
-                    onTap: () => switchToSection(8,false),
+                    onTap: () => switchToSection(9,false),
                   ),
                   ListTile(
                     title: const Text(

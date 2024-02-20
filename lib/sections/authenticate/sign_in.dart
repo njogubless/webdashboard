@@ -123,8 +123,7 @@ class _SignInState extends State<SignIn> {
                                     loading = false;
                                     setState(() => error =
                                         'Invalid login, please try again');
-                                  }
-                                  // Else, the Wrapper gets a new user and shows the Home Page
+                                  }                                  // Else, the Wrapper gets a new user and shows the Home Page
                                 }
                               },
                               child: Material(

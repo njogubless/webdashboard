@@ -16,7 +16,7 @@ class BookedEvents extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Booked Events',
+              'Booking Details',
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: 50,
@@ -47,7 +47,7 @@ class BookedEvents extends StatelessWidget {
                       label: Text('Date Booked'),
                     ),
                     DataColumn(
-                      label: Text('Reach out'),
+                      label: Text('Action'),
                     ),
                   ],
                   rows: [
