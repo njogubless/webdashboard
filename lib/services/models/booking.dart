@@ -30,10 +30,12 @@ class BookedEventItem {
   final String userName;
   final String eventName;
   final String bookingDate;
+  final int eventCost;
   const BookedEventItem({
     required this.userEmail,
     required this.userName,
     required this.eventName,
     required this.bookingDate,
+    required this.eventCost,
   });
 }

@@ -123,7 +123,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
                     title: const Text('Finance Manager'),
                     onTap: () => switchToSection(7, false),
                   ),ListTile(
-                    leading: Icon(Icons.star),
+                    leading: Icon(Icons.reviews_outlined),
                     title: const Text('Ratings'),
                     onTap: () => switchToSection(8,false),
                   ),

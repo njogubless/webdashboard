@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -30,8 +32,8 @@ class RatingsPage extends StatelessWidget {
               var timestamp = feedback['timestamp']?.toDate();
               var message = feedback['feedback'];
               // You can access 'name' and 'role' if you have these fields in your Firestore documents
-              // var name = feedback['name'];
-              // var role = feedback['role'];
+              var name = feedback['name'];
+              var role = feedback['role'];
 
               return ListTile(
                 title: Text('Time: ${timestamp ?? 'N/A'}'),
@@ -40,7 +42,7 @@ class RatingsPage extends StatelessWidget {
             },
           );
         },
-      ),
+      ), 
     );
   }
 }

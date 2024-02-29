@@ -78,6 +78,7 @@ class Database {
         userName: user.clientName,
         eventName: event.eventName,
         bookingDate: booking.bookingDate,
+        eventCost: event.eventCost,
       ));
     }
 

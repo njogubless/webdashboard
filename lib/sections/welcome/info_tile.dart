@@ -5,6 +5,8 @@ class InfoTile extends StatelessWidget {
     super.key,
     required this.title,
     required this.stat,
+    required icon, 
+    
   });
 
   final String title;

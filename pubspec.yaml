@@ -23,6 +23,7 @@ dependencies:
   feature_folder_cli: ^0.3.0
   sidebarx: ^0.16.1
   collection: ^1.17.1
+  font_awesome_flutter: ^9.2.0
 
 dev_dependencies:
   flutter_test:

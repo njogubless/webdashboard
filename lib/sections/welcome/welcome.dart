@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hikers_dash/sections/welcome/info_tile.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/client.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WelcomeSection extends StatefulWidget {
   const WelcomeSection({
@@ -21,14 +22,6 @@ class _WelcomeSectionState extends State<WelcomeSection> {
     return Scaffold(
       appBar: AppBar(
         title: Text('HikersAfrique Admin Panel'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              // Implement search functionality here
-            },
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 20, left: 50),
@@ -74,9 +67,10 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                                 InfoTile(
                                   title: 'Verified users',
                                   stat: clients!
-                                      .where(
-                                          (client) => client.status == 'Verified')
+                                      .where((client) =>
+                                          client.status == 'Verified')
                                       .length,
+                                      icon: Icons.group_add_rounded,
                                 ),
                                 SizedBox(width: 10),
                                 InfoTile(
@@ -85,6 +79,8 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                                       .where((client) =>
                                           !(client.status == 'Verified'))
                                       .length,
+                                      icon:Icons.question_mark,
+                                      
                                 ),
                               ],
                             ),
@@ -100,6 +96,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                                       return InfoTile(
                                         title: 'Number of events',
                                         stat: events,
+                                        icon:Icons.event,
                                       );
                                     }),
                                 SizedBox(width: 10),
@@ -111,6 +108,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                                       return InfoTile(
                                         title: 'Income generated',
                                         stat: income,
+                                        icon: Icons.money_rounded,
                                       );
                                     }),
                               ],

@@ -44,6 +44,9 @@ class BookedEvents extends StatelessWidget {
                       label: Text('User Email'),
                     ),
                     DataColumn(
+                      label: Text('Event Cost (Ksh)'),
+                    ),
+                    DataColumn(
                       label: Text('Date Booked'),
                     ),
                     DataColumn(
@@ -58,6 +61,7 @@ class BookedEvents extends StatelessWidget {
                           DataCell(Text(event.eventName)),
                           DataCell(Text(event.userName)),
                           DataCell(Text(event.userEmail)),
+                          DataCell(Text('${event.eventCost}')),
                           DataCell(Text(event.bookingDate.substring(0, 10))),
                           DataCell(
                             IconButton(
