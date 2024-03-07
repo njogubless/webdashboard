@@ -13,6 +13,8 @@ class ApprovedUsersPage extends StatelessWidget {
   // Function to build the table rows
   Widget buildTable(List<Client> users) {
     return DataTable(
+        headingRowColor:
+          MaterialStateColor.resolveWith((states) => Colors.blueAccent),
       columns: [
         DataColumn(label: Text('Name')),
         DataColumn(label: Text('Email')),
@@ -98,7 +100,6 @@ class PendingUsersPage extends StatelessWidget {
   }
 
 //function to reject a client
-
   void rejectclient(Client client) {
     //call a function from the database to change the satus
     //from 'pending' to 'rejected'
@@ -110,39 +111,42 @@ class PendingUsersPage extends StatelessWidget {
   }
 
   // Function to build the table rows
-Widget buildTable(List<Client> users) {
-  return DataTable(
-    columns: [
-      DataColumn(label: Text('Name')),
-      DataColumn(label: Text('Email')),
-      DataColumn(label: Text('Role')),
-      DataColumn(label: Text('Action')),
-    ],
-    rows: users.map((user) {
-      return DataRow(cells: [
-        DataCell(Text(user.clientName)), // Display Name
-        DataCell(Text(user.clientEmail)), // Display Email
-        DataCell(Text(user.role)), // Display Role
-        DataCell(Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.check), // Action to verify user
-              onPressed: () {
-                approveClient(user); // Call your approval function
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.close), // Action to reject user
-              onPressed: () {
-                rejectclient(user); // Call your rejection function
-              },
-            ),
-          ],
-        )),
-      ]);
-    }).toList(),
-  );
-}
+  Widget buildTable(List<Client> users) {
+    return DataTable(
+      headingRowColor:
+          MaterialStateColor.resolveWith((states) => Colors.blueAccent),
+      columns: [
+        DataColumn(label: Text('Name')),
+        DataColumn(label: Text('Email')),
+        DataColumn(label: Text('Role')),
+        DataColumn(label: Text('Action')),
+      ],
+      rows: users.map((user) {
+        return DataRow(cells: [
+          DataCell(Text(user.clientName)), // Display Name
+          DataCell(Text(user.clientEmail)), // Display Email
+          DataCell(Text(user.role)), // Display Role
+          DataCell(Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.check), // Action to verify user
+                onPressed: () {
+                  approveClient(user); // Call your approval function
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.close), // Action to reject user
+                onPressed: () {
+                  rejectclient(user); // Call your rejection function
+                },
+              ),
+            ],
+          )),
+        ]);
+      }).toList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -214,6 +218,8 @@ class RejectedUsersPage extends StatelessWidget {
   // Function to build the table rows
   Widget buildTable(List<Client> users) {
     return DataTable(
+      headingRowColor:
+          MaterialStateColor.resolveWith((states) => Colors.blueAccent),
       columns: [
         DataColumn(label: Text('Name')),
         DataColumn(label: Text('Email')),

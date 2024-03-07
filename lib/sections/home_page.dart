@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hikers_dash/sections/Logistics/logistics.dart';
 import 'package:hikers_dash/sections/booked_events/booked_events.dart';
 import 'package:hikers_dash/sections/add_events/add_events.dart';
 import 'package:hikers_dash/sections/manage_events/manage_events.dart';
@@ -56,6 +57,13 @@ class _HomeNavigationState extends State<HomeNavigation> {
         return const RatingsPage();
       case 9:
         return const SettingsPage();
+      case 10:
+        return LogisticsPage(
+          eventName: 'Event Name',
+          eventDate: 'Event Date',
+          driverName: 'Driver Name',
+          guideName: 'Guide Name',
+        );
       default:
         AuthService().signOut();
         return const Center();
@@ -123,6 +131,10 @@ class _HomeNavigationState extends State<HomeNavigation> {
                     title: const Text('Finance Manager'),
                     onTap: () => switchToSection(7, false),
                   ),ListTile(
+                        leading: Icon(Icons.local_shipping),
+                        title: const Text('Logistics'),
+                        onTap: () => switchToSection(10, false),
+                      ), ListTile(
                     leading: Icon(Icons.reviews_outlined),
                     title: const Text('Ratings'),
                     onTap: () => switchToSection(8,false),

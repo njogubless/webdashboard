@@ -167,6 +167,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                                       (client) => client.status == 'Verified')
                                   .length,
                               icon: Icons.group_add_rounded,
+                              iconColor: Colors.white,
                             ),
                             SizedBox(width: 10),
                             InfoTile(
@@ -175,7 +176,8 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                                   .where((client) =>
                                       !(client.status == 'Verified'))
                                   .length,
-                              icon: Icons.question_mark,
+                              icon: Icons.person_outlined,
+                              iconColor: Colors.white,
                             ),
                           ],
                         ),
@@ -192,6 +194,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                                   title: 'Number of events',
                                   stat: events,
                                   icon: Icons.event,
+                                  iconColor: Colors.white,
                                 );
                               },
                             ),
@@ -205,6 +208,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                                   title: 'Income generated',
                                   stat: income,
                                   icon: Icons.money_rounded,
+                                  iconColor: Colors.white,
                                 );
                               },
                             ),
