@@ -83,7 +83,6 @@ class _LogisticsPageState extends State<LogisticsPage> {
                             ),
                           ),
                         ]),
-                       
                         DataRow(cells: [
                           DataCell(
                             Container(

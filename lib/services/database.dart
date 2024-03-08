@@ -3,12 +3,48 @@ import 'package:collection/collection.dart';
 import 'package:hikers_dash/services/models/booking.dart';
 import 'package:hikers_dash/services/models/client.dart';
 import 'package:hikers_dash/services/models/event.dart';
+import 'package:hikers_dash/services/models/payment.dart';
 
 class Database {
   // Initialize Firestore
   static final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   static var instance;
+
+
+  static Future<List<Payment>> getrecordPayments() async {
+    try {
+      QuerySnapshot querySnapshot = await firestore.collection('payments').get();
+
+      List<Payment> payments = [];
+
+      for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+        String clientName = doc['clientName'];
+        double amountPaid = doc['amountPaid'];
+        double totalCost = doc['totalCost'];
+        String email = doc['email'];
+        String event = doc['event'];
+        String mpesaCode = doc['mpesaCode'];
+
+        Payment payment = Payment(
+          clientName: clientName,
+          amountPaid: amountPaid,
+          email: email,
+          event: event,
+          mpesaCode: mpesaCode,
+          totalCost: totalCost,
+        );
+
+        payments.add(payment);
+      }
+
+      return payments;
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error fetching payments: $e');
+      return [];
+    }
+  }
 
   // Save registered client data
   static Future<void> saveClientData(Client client) async {

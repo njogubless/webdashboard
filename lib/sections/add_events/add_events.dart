@@ -18,6 +18,7 @@ class _AddEventsState extends State<AddEvents> {
   final _eventCostController = TextEditingController();
   final _eventLocationController = TextEditingController();
   final _eventImageUrlController = TextEditingController();
+  final _eventtotalCostController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +126,7 @@ class _AddEventsState extends State<AddEvents> {
                             eventLocation: _eventLocationController.text,
                             eventName: _eventNameController.text,
                             eventTime: _eventTimeController.text,
+                            totalCost: int.parse(_eventtotalCostController.text),
                           ),
                         );
                         _eventNameController.clear();
@@ -133,6 +135,7 @@ class _AddEventsState extends State<AddEvents> {
                         _eventCostController.clear();
                         _eventLocationController.clear();
                         _eventImageUrlController.clear();
+                        _eventtotalCostController.clear();
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text('Event created!'),

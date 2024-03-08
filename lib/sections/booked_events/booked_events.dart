@@ -16,7 +16,7 @@ class BookedEvents extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Booking Details',
+              'Finance Details',
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: 50,
@@ -41,16 +41,7 @@ class BookedEvents extends StatelessWidget {
                       label: Text('User Name'),
                     ),
                     DataColumn(
-                      label: Text('User Email'),
-                    ),
-                    DataColumn(
                       label: Text('Event Cost (Ksh)'),
-                    ),
-                    DataColumn(
-                      label: Text('Date Booked'),
-                    ),
-                    DataColumn(
-                      label: Text('Action'),
                     ),
                   ],
                   rows: [
@@ -60,7 +51,6 @@ class BookedEvents extends StatelessWidget {
                           DataCell(Text('${bookedEvents.indexOf(event) + 1}')),
                           DataCell(Text(event.eventName)),
                           DataCell(Text(event.userName)),
-                          DataCell(Text(event.userEmail)),
                           DataCell(Text('${event.eventCost}')),
                           DataCell(Text(event.bookingDate.substring(0, 10))),
                           DataCell(

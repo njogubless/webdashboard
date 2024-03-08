@@ -4,6 +4,7 @@ class Event {
   final String eventDate;
   final String eventTime;
   final int eventCost;
+  final int totalCost;
   final String eventLocation;
   final String eventImageUrl;
   const Event({
@@ -14,6 +15,7 @@ class Event {
     required this.eventCost,
     required this.eventLocation,
     required this.eventImageUrl,
+    required this.totalCost,
   });
 
   factory Event.fromJson(Map<String, dynamic> event) {
@@ -23,6 +25,7 @@ class Event {
       eventDate: event['eventDate'] ?? '',
       eventTime: event['eventTime'] ?? '',
       eventCost: event['eventCost'] ?? '',
+      totalCost: event['totalCost'] ?? '',
       eventLocation: event['eventLocation'] ?? '',
       eventImageUrl: event['eventImageUrl'] ?? '',
     );
@@ -37,6 +40,7 @@ class Event {
       'eventCost': eventCost,
       'eventLocation': eventLocation,
       'eventImageUrl': eventImageUrl,
+      'totalCost': totalCost,
     };
   }
 }

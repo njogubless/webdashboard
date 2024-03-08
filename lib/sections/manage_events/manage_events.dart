@@ -62,7 +62,7 @@ class _ManageEventsState extends State<ManageEvents> {
                         cells: [
                           DataCell(Text('${events.indexOf(event) + 1}')),
                           DataCell(Text(event.eventName)),
-                          DataCell(Text('${event.eventCost}')),
+                          DataCell(Text('${event.totalCost}')),
                           DataCell(Text(event.eventDate)),
                           DataCell(Text(event.eventTime)),
                           DataCell(
