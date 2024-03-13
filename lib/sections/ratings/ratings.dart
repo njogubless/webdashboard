@@ -30,19 +30,27 @@ class RatingsPage extends StatelessWidget {
               var feedback =
                   snapshot.data!.docs[index].data() as Map<String, dynamic>;
               var timestamp = feedback['timestamp']?.toDate();
-              var message = feedback['feedback'];
+              var message = feedback['message'];
               // You can access 'name' and 'role' if you have these fields in your Firestore documents
-              var name = feedback['name'];
-              var role = feedback['role'];
+              var name = feedback['name'] ?? '';
+              var role = feedback['role'] ?? '';
 
-              return ListTile(
-                title: Text('Time: ${timestamp ?? 'N/A'}'),
-                subtitle: Text('Feedback: ${message ?? 'N/A'}'),
+              return Column(
+                children: [
+                  ListTile(
+                    title: Text('Name: ${name ?? 'N/A'}'),
+                    subtitle: Text('Role:${role ?? 'N/A'}'),
+                  ),
+                  ListTile(
+                    title: Text('Time: ${timestamp ?? 'N/A'}'),
+                    subtitle: Text('Feedback: ${message ?? 'N/A'}'),
+                  ),
+                ],
               );
             },
           );
         },
-      ), 
+      ),
     );
   }
 }
