@@ -58,9 +58,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
       case 9:
         return const SettingsPage();
       case 10:
-        return LogisticsPage(
-        logisticsData: [],
-        );
+        return LogisticsPageScreen();
       default:
         AuthService().signOut();
         return const Center();
@@ -127,19 +125,21 @@ class _HomeNavigationState extends State<HomeNavigation> {
                     leading: Icon(Icons.person_2_sharp),
                     title: const Text('Finance Manager'),
                     onTap: () => switchToSection(7, false),
-                  ),ListTile(
-                        leading: Icon(Icons.local_shipping),
-                        title: const Text('Logistics'),
-                        onTap: () => switchToSection(10, false),
-                      ), ListTile(
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.local_shipping),
+                    title: const Text('Logistics'),
+                    onTap: () => switchToSection(10, false),
+                  ),
+                  ListTile(
                     leading: Icon(Icons.reviews_outlined),
                     title: const Text('Ratings'),
-                    onTap: () => switchToSection(8,false),
+                    onTap: () => switchToSection(8, false),
                   ),
                   ListTile(
                     leading: Icon(Icons.settings),
                     title: const Text('Settings'),
-                    onTap: () => switchToSection(9,false),
+                    onTap: () => switchToSection(9, false),
                   ),
                   ListTile(
                     title: const Text(

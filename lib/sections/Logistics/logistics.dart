@@ -5,7 +5,8 @@ import 'package:hikers_dash/services/models/logistics.dart';
 class LogisticsPage extends StatelessWidget {
   final List<LogisticsData> logisticsData;
 
-  const LogisticsPage({Key? key, required this.logisticsData}) : super(key: key);
+  const LogisticsPage({Key? key, required this.logisticsData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +37,8 @@ class LogisticsPage extends StatelessWidget {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
-                      headingRowColor:
-                          MaterialStateColor.resolveWith((states) => Colors.blueGrey),
+                      headingRowColor: MaterialStateColor.resolveWith(
+                          (states) => Colors.blueGrey),
                       columns: [
                         DataColumn(label: Text('Event Name')),
                         DataColumn(label: Text('Driver')),
@@ -90,6 +91,7 @@ class _LogisticsPageScreenState extends State<LogisticsPageScreen> {
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('allocations').get();
 
+      print(querySnapshot);
       List<LogisticsData> tempData = [];
 
       querySnapshot.docs.forEach((doc) {
