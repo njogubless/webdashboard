@@ -1,24 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hikers_dash/services/models/logistics.dart';
 
-class LogisticsPage extends StatefulWidget {
-  final String eventName;
-  final String eventDate;
-  final String driverName;
-  final String guideName;
+class LogisticsPage extends StatelessWidget {
+  final List<LogisticsData> logisticsData;
 
-  const LogisticsPage({
-    Key? key,
-    required this.eventName,
-    required this.eventDate,
-    required this.driverName,
-    required this.guideName,
-  }) : super(key: key);
+  const LogisticsPage({Key? key, required this.logisticsData}) : super(key: key);
 
-  @override
-  _LogisticsPageState createState() => _LogisticsPageState();
-}
-
-class _LogisticsPageState extends State<LogisticsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,94 +36,29 @@ class _LogisticsPageState extends State<LogisticsPage> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
-                      headingRowColor: MaterialStateColor.resolveWith(
-                          (states) => Colors.blueGrey),
+                      headingRowColor:
+                          MaterialStateColor.resolveWith((states) => Colors.blueGrey),
                       columns: [
-                        DataColumn(label: Text('EventName')),
-                        DataColumn(label: Text('EventDate')),
-                        DataColumn(label: Text('DriverName')),
-                        DataColumn(label: Text('GuideName')),
+                        DataColumn(label: Text('Event Name')),
+                        DataColumn(label: Text('Driver')),
+                        DataColumn(label: Text('Guide')),
                       ],
-                      rows: [
-                        DataRow(cells: [
-                          DataCell(
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(widget.eventName),
-                            ),
-                          ),
-                          DataCell(
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(widget.eventDate),
-                            ),
-                          ),
-                          DataCell(
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(widget.driverName),
-                            ),
-                          ),
-                          DataCell(
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(widget.guideName),
-                            ),
-                          ),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('Event2'),
-                            ),
-                          ),
-                          DataCell(
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('Date2'),
-                            ),
-                          ),
-                          DataCell(
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('Driver2'),
-                            ),
-                          ),
-                          DataCell(
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('Guide2'),
-                            ),
-                          ),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('Event3'),
-                            ),
-                          ),
-                          DataCell(
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('Date3'),
-                            ),
-                          ),
-                          DataCell(
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('Driver3'),
-                            ),
-                          ),
-                          DataCell(
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('Guide3'),
-                            ),
-                          ),
-                        ]),
-                      ],
+                      rows: logisticsData.map((data) {
+                        return DataRow(cells: [
+                          DataCell(Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(data.eventName),
+                          )),
+                          DataCell(Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(data.driver),
+                          )),
+                          DataCell(Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(data.guide),
+                          )),
+                        ]);
+                      }).toList(),
                     ),
                   ),
                 ],
@@ -145,5 +68,49 @@ class _LogisticsPageState extends State<LogisticsPage> {
         ),
       ),
     );
+  }
+}
+
+class LogisticsPageScreen extends StatefulWidget {
+  @override
+  _LogisticsPageScreenState createState() => _LogisticsPageScreenState();
+}
+
+class _LogisticsPageScreenState extends State<LogisticsPageScreen> {
+  List<LogisticsData> logisticsData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchLogisticsData();
+  }
+
+  Future<void> fetchLogisticsData() async {
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('allocations').get();
+
+      List<LogisticsData> tempData = [];
+
+      querySnapshot.docs.forEach((doc) {
+        tempData.add(LogisticsData(
+          eventName: doc['event'] ?? '',
+          driver: doc['driver'] ?? '',
+          guide: doc['guide'] ?? '',
+        ));
+      });
+
+      setState(() {
+        logisticsData = tempData;
+      });
+    } catch (e) {
+      // Handle any errors that might occur
+      print("Error fetching logistics data: $e");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LogisticsPage(logisticsData: logisticsData);
   }
 }

@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:hikers_dash/services/models/booking.dart';
 import 'package:hikers_dash/services/models/client.dart';
 import 'package:hikers_dash/services/models/event.dart';
+import 'package:hikers_dash/services/models/logistics.dart';
 import 'package:hikers_dash/services/models/payment.dart';
 
 class Database {
@@ -25,6 +26,8 @@ class Database {
         String email = doc['email'];
         String event = doc['event'];
         String mpesaCode = doc['mpesaCode'];
+        // ignore: unused_local_variable
+        String Status= doc['status'];
 
         Payment payment = Payment(
           clientName: clientName,
@@ -33,6 +36,8 @@ class Database {
           event: event,
           mpesaCode: mpesaCode,
           totalCost: totalCost,
+          Status: doc['status'] ?? '',
+          id: doc['id'], 
         );
 
         payments.add(payment);
@@ -43,6 +48,56 @@ class Database {
       // ignore: avoid_print
       print('Error fetching payments: $e');
       return [];
+    }
+  }
+
+  void fetchLogisticsData() async {
+  try {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('allocations').get();
+    List<LogisticsData> tempData = [];
+
+    querySnapshot.docs.forEach((doc) {
+      //print("Document ID: ${doc.id}");
+      print("Event: ${doc['event']}");
+      print("Driver: ${doc['driver']}");
+      print("Guide: ${doc['guide']}");
+
+      tempData.add(LogisticsData(
+        eventName: doc['event'] ?? '',
+        driver: doc['driver'] ?? '',
+        guide: doc['guide'] ?? '',
+      ));
+    });
+
+  } catch (e) {
+    print("Error fetching logistics data: $e");
+  }
+}
+
+
+  static Future<List<Payment>> getPaymentsByStatus(String status) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('payments')
+          .where('status', isEqualTo: status)
+          .get();
+
+      List<Payment> payments = querySnapshot.docs.map((doc) {
+        return Payment(
+          id: doc['id'], 
+          clientName: doc['clientName'],
+          amountPaid: doc['amountPaid'],
+          email: doc['email'],
+          event: doc['event'],
+          mpesaCode: doc['mpesaCode'],
+          totalCost: doc['totalCost'],
+          Status: doc['status'],
+        );
+      }).toList();
+
+      return payments;
+    } catch (e) {
+      throw Exception('Error getting payments by status: $e');
     }
   }
 

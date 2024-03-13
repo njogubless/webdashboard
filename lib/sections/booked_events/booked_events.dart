@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hikers_dash/services/database.dart';
-import 'package:hikers_dash/services/models/booking.dart';
+import 'package:hikers_dash/services/models/payment.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookedEvents extends StatelessWidget {
-  const BookedEvents({super.key});
+  const BookedEvents({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 20, left: 50),
       child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,46 +25,53 @@ class BookedEvents extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
-            FutureBuilder<List<BookedEventItem>>(
-              future: Database.getBookedEvents(),
-              initialData: const [],
+            FutureBuilder<List<Payment>>(
+              future: Database.getrecordPayments(),
               builder: (context, snapshot) {
-                final bookedEvents = snapshot.data!;
-                return DataTable(
-                  columns: [
-                    DataColumn(
-                      label: Text('#'),
-                    ),
-                    DataColumn(
-                      label: Text('Event Name'),
-                    ),
-                    DataColumn(
-                      label: Text('User Name'),
-                    ),
-                    DataColumn(
-                      label: Text('Event Cost (Ksh)'),
-                    ),
-                  ],
-                  rows: [
-                    for (final event in bookedEvents)
-                      DataRow(
-                        cells: [
-                          DataCell(Text('${bookedEvents.indexOf(event) + 1}')),
-                          DataCell(Text(event.eventName)),
-                          DataCell(Text(event.userName)),
-                          DataCell(Text('${event.eventCost}')),
-                          DataCell(Text(event.bookingDate.substring(0, 10))),
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  final List<Payment> payments = snapshot.data!;
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columns: [
+                        DataColumn(label: Text('#')),
+                        DataColumn(label: Text('Client Name')),
+                        DataColumn(label: Text('Client Email')),
+                        DataColumn(label: Text('Event')),
+                        DataColumn(label: Text('M-Pesa Code')),
+                        DataColumn(label: Text('Amount Paid (Ksh)')),
+                        DataColumn(label: Text('Total Cost (Ksh)')),
+                        DataColumn(label: Text('Status')),
+                        DataColumn(label: Text('Action')),
+                      ],
+                      rows: payments.map((payment) {
+                        return DataRow(cells: [
+                          DataCell(Text('${payments.indexOf(payment) + 1}')),
+                          DataCell(Text(payment.clientName)),
+                          DataCell(Text(payment.email)),
+                          DataCell(Text(payment.event)),
+                          DataCell(Text(payment.mpesaCode)),
+                          DataCell(Text('${payment.amountPaid}')),
+                          DataCell(Text('${payment.totalCost}')),
+                          DataCell(
+                            Text(
+                              payment.status ?? 'Unknown',
+                            ),
+                          ),
                           DataCell(
                             IconButton(
                               onPressed: () {
                                 final Uri emailLaunchUri = Uri(
                                   scheme: 'mailto',
-                                  path: event.userEmail,
-                                  query: encodeQueryParameters(<String, String>{
-                                    'subject': 'RE: ${event.eventName}',
-                                  }),
+                                  path: payment.email,
+                                  query: encodeQueryParameters(
+                                    {'subject': 'RE: ${payment.event}'},
+                                  ),
                                 );
-
                                 launchUrl(emailLaunchUri);
                               },
                               icon: const Icon(
@@ -71,11 +79,12 @@ class BookedEvents extends StatelessWidget {
                                 color: Colors.blue,
                               ),
                             ),
-                          )
-                        ],
-                      )
-                  ],
-                );
+                          ),
+                        ]);
+                      }).toList(),
+                    ),
+                  );
+                }
               },
             ),
           ],
@@ -84,9 +93,17 @@ class BookedEvents extends StatelessWidget {
     );
   }
 
-  String? encodeQueryParameters(Map<String, String> params) {
+  void launchUrl(Uri uri) async {
+    if (await canLaunch(uri.toString())) {
+      await launch(uri.toString());
+    } else {
+      throw 'Could not launch $uri';
+    }
+  }
+
+  String encodeQueryParameters(Map<String, String> params) {
     return params.entries
-        .map((MapEntry<String, String> e) =>
+        .map((e) =>
             '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
         .join('&');
   }

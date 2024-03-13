@@ -59,10 +59,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
         return const SettingsPage();
       case 10:
         return LogisticsPage(
-          eventName: 'Event Name',
-          eventDate: 'Event Date',
-          driverName: 'Driver Name',
-          guideName: 'Guide Name',
+        logisticsData: [],
         );
       default:
         AuthService().signOut();

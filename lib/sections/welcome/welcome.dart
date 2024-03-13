@@ -168,32 +168,36 @@ class _WelcomeSectionState extends State<WelcomeSection> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FutureBuilder<int>(
-                  future: Database.getNumberOfEvents(),
-                  initialData: 0,
-                  builder: (context, snapshot) {
-                    final events = snapshot.data!;
-                    return InfoTile(
-                      title: 'Number of events',
-                      stat: events,
-                      icon: Icons.event,
-                      iconColor: Colors.white,
-                    );
-                  },
+                FittedBox(
+                  child: FutureBuilder<int>(
+                    future: Database.getNumberOfEvents(),
+                    initialData: 0,
+                    builder: (context, snapshot) {
+                      final events = snapshot.data ?? 0;
+                      return InfoTile(
+                        title: 'Number of events',
+                        stat: events,
+                        icon: Icons.event,
+                        iconColor: Colors.white,
+                      );
+                    },
+                  ),
                 ),
                 SizedBox(width: 10),
-                FutureBuilder<int>(
-                  future: Database.getTotalRevenue(),
-                  initialData: 0,
-                  builder: (context, snapshot) {
-                    final income = snapshot.data!;
-                    return InfoTile(
-                      title: 'Income generated',
-                      stat: income,
-                      icon: Icons.attach_money,
-                      iconColor: Colors.white,
-                    );
-                  },
+                FittedBox(
+                  child: FutureBuilder<int>(
+                    future: Database.getTotalRevenue(),
+                    initialData: 0,
+                    builder: (context, snapshot) {
+                      final income = snapshot.data ?? 0;
+                      return InfoTile(
+                        title: 'Income generated',
+                        stat: income,
+                        icon: Icons.attach_money,
+                        iconColor: Colors.white,
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

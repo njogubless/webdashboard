@@ -7,6 +7,7 @@ class Event {
   final int totalCost;
   final String eventLocation;
   final String eventImageUrl;
+
   const Event({
     required this.eventID,
     required this.eventName,
@@ -24,8 +25,8 @@ class Event {
       eventName: event['eventName'] ?? '',
       eventDate: event['eventDate'] ?? '',
       eventTime: event['eventTime'] ?? '',
-      eventCost: event['eventCost'] ?? '',
-      totalCost: event['totalCost'] ?? '',
+      eventCost: int.tryParse(event['eventCost'].toString()) ?? 0,
+      totalCost: int.tryParse(event['totalCost'].toString()) ?? 0,
       eventLocation: event['eventLocation'] ?? '',
       eventImageUrl: event['eventImageUrl'] ?? '',
     );
