@@ -120,7 +120,7 @@ class _ManageEventsState extends State<ManageEvents> {
 
   String _getClientEmail(Event event) {
     Payment payment = _findPaymentForEvent(event);
-    return payment.email ?? 'N/A';
+    return payment.email;
   }
 
   Payment _findPaymentForEvent(Event event) {
@@ -129,7 +129,7 @@ class _ManageEventsState extends State<ManageEvents> {
       (payment) => payment.event == event.eventName,
       orElse: () => Payment(clientName: '', amountPaid: 0, email: '', event: '', mpesaCode: '', totalCost: 0, Status: '', id: ''),
     );
-    return payment!;
+    return payment;
   }
 
   void _deleteEvent(Event event) async {

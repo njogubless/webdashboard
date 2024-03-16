@@ -3,38 +3,6 @@ import 'package:hikers_dash/sections/welcome/info_tile.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/client.dart';
 
-class SearchBar extends StatelessWidget {
-  final TextEditingController controller;
-  final Function(String) onChanged;
-
-  const SearchBar({
-    Key? key,
-    required this.controller,
-    required this.onChanged,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.2,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        color: Colors.grey[200],
-      ),
-      child: TextField(
-        controller: controller,
-        onChanged: onChanged,
-        decoration: InputDecoration(
-          hintText: 'Search here...',
-          prefixIcon: Icon(Icons.search),
-          border: InputBorder.none,
-          contentPadding:
-              EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
-        ),
-      ),
-    );
-  }
-}
 
 class WelcomeSection extends StatefulWidget {
   const WelcomeSection({

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hikers_dash/sections/Logistics/logistics.dart';
+import 'package:hikers_dash/sections/Partners/partners.dart';
 import 'package:hikers_dash/sections/booked_events/booked_events.dart';
 import 'package:hikers_dash/sections/add_events/add_events.dart';
 import 'package:hikers_dash/sections/manage_events/manage_events.dart';
@@ -59,6 +60,8 @@ class _HomeNavigationState extends State<HomeNavigation> {
         return const SettingsPage();
       case 10:
         return LogisticsPageScreen();
+      case 11:
+        return const PartnersPage();
       default:
         AuthService().signOut();
         return const Center();
@@ -125,6 +128,11 @@ class _HomeNavigationState extends State<HomeNavigation> {
                     leading: Icon(Icons.person_2_sharp),
                     title: const Text('Finance Manager'),
                     onTap: () => switchToSection(7, false),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.emoji_people_rounded),
+                    title: const Text('Partners'),
+                    onTap: () => switchToSection(11, false),
                   ),
                   ListTile(
                     leading: Icon(Icons.local_shipping),

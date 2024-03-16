@@ -2,7 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/client.dart';
 
-class ApprovedUsersPage extends StatelessWidget {
+class SearchBar extends StatelessWidget {
+  final TextEditingController controller;
+  final Function(String) onChanged;
+
+  const SearchBar({
+    Key? key,
+    required this.controller,
+    required this.onChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.2,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.grey[200],
+      ),
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          hintText: 'Search here...',
+          prefixIcon: Icon(Icons.search),
+          border: InputBorder.none,
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
+        ),
+      ),
+    );
+  }
+}
+
+class ApprovedUsersPage extends StatefulWidget {
   const ApprovedUsersPage({
     required this.isClient,
     Key? key,
@@ -10,11 +43,64 @@ class ApprovedUsersPage extends StatelessWidget {
 
   final bool isClient;
 
+  @override
+  _ApprovedUsersPageState createState() => _ApprovedUsersPageState();
+}
+
+class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
+  late List<Client> _clients;
+  late List<Client> _filteredClients;
+  late TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _clients = [];
+    _filteredClients = [];
+    _searchController = TextEditingController();
+    _loadData();
+  }
+
+  void _loadData() async {
+    List<Client> clients = await Database.getClients();
+
+    setState(() {
+      _clients = clients;
+      _filteredClients = clients;
+    });
+  }
+
+  void _performSearch(String query) {
+    setState(() {
+      _filteredClients = _clients
+          .where((client) =>
+              client.clientName.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  void _filterClients() {
+    setState(() {
+      _filteredClients = _clients
+          .where((client) =>
+              (widget.isClient && client.role == 'client') ||
+              (!widget.isClient && client.role != 'client'))
+          .toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   // Function to build the table rows
   Widget buildTable(List<Client> users) {
     return DataTable(
-        headingRowColor:
-          MaterialStateColor.resolveWith((states) => Colors.blueAccent),
+      headingRowColor: MaterialStateColor.resolveWith(
+        (states) => Colors.blueAccent,
+      ),
       columns: [
         DataColumn(label: Text('Name')),
         DataColumn(label: Text('Email')),
@@ -45,40 +131,39 @@ class ApprovedUsersPage extends StatelessWidget {
           ),
         ),
       ),
-      body: FutureBuilder<List<Client>>(
-        future: Database.getApprovedClients(),
-        initialData: [],
-        builder: (context, snapshot) {
-          final approvedUsers = snapshot.data!
-              .where((element) => isClient
-                  ? element.role == 'client'
-                  : element.role != 'client')
-              .toList();
-          return approvedUsers.isEmpty
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 70),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 18),
-                      child: Text(
-                        'No approved users',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                  ],
-                )
-              : SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: buildTable(approvedUsers),
-                  ),
-                );
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Icon(Icons.search),
+                SizedBox(width: 10),
+                SearchBar(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    _performSearch(value);
+                    _filterClients();
+                  },
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: buildTable(_filteredClients),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+
 
 class PendingUsersPage extends StatelessWidget {
   const PendingUsersPage({
