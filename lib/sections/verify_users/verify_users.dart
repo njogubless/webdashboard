@@ -81,7 +81,7 @@ class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
 
   void _filterClients() {
     setState(() {
-      _filteredClients = _clients
+      _filteredClients = _filteredClients
           .where((client) =>
               (widget.isClient && client.role == 'client') ||
               (!widget.isClient && client.role != 'client'))

@@ -8,10 +8,10 @@ class BookedEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 50),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20, left: 50, right: 50), // Adjust the padding as needed
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +43,6 @@ class BookedEvents extends StatelessWidget {
                         DataColumn(label: Text('Client Email')),
                         DataColumn(label: Text('Event')),
                         DataColumn(label: Text('M-Pesa Code')),
-                        DataColumn(label: Text('Amount Paid (Ksh)')),
                         DataColumn(label: Text('Total Cost (Ksh)')),
                         DataColumn(label: Text('Status')),
                         DataColumn(label: Text('Action')),
@@ -55,7 +54,6 @@ class BookedEvents extends StatelessWidget {
                           DataCell(Text(payment.email)),
                           DataCell(Text(payment.event)),
                           DataCell(Text(payment.mpesaCode)),
-                          DataCell(Text('${payment.amountPaid}')),
                           DataCell(Text('${payment.totalCost}')),
                           DataCell(
                             Text(
