@@ -2,11 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hikers_dash/services/models/logistics.dart';
 
-class LogisticsPage extends StatelessWidget {
+class LogisticsPage extends StatefulWidget {
   final List<LogisticsData> logisticsData;
 
   const LogisticsPage({Key? key, required this.logisticsData})
       : super(key: key);
+
+  @override
+  State<LogisticsPage> createState() => _LogisticsPageState();
+}
+
+class _LogisticsPageState extends State<LogisticsPage> {
+  TextEditingController searchController = TextEditingController();
+  List<LogisticsData> filteredLogisticsData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredLogisticsData = widget.logisticsData;
+  }
+
+  void _searchLogisticsData(String searchText) {
+    setState(() {
+      filteredLogisticsData = widget.logisticsData
+          .where((data) =>
+              data.eventName.toLowerCase().contains(searchText.toLowerCase()) ||
+              data.driver.toLowerCase().contains(searchText.toLowerCase()) ||
+              data.guide.toLowerCase().contains(searchText.toLowerCase()))
+          .toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +59,29 @@ class LogisticsPage extends StatelessWidget {
                       ),
                     ),
                   ),
+                  TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search logistics...',
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          _searchLogisticsData(searchController.text);
+                        },
+                      ),
+                    ),
+                  ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
-                      headingRowColor: MaterialStateColor.resolveWith(
-                          (states) => Colors.blueGrey),
+                      headingRowColor:
+                          MaterialStateColor.resolveWith((states) => Colors.blueGrey),
                       columns: [
                         DataColumn(label: Text('Event Name')),
                         DataColumn(label: Text('Driver')),
                         DataColumn(label: Text('Guide')),
                       ],
-                      rows: logisticsData.map((data) {
+                      rows: filteredLogisticsData.map((data) {
                         return DataRow(cells: [
                           DataCell(Container(
                             padding: EdgeInsets.symmetric(horizontal: 8.0),

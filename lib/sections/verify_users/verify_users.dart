@@ -37,7 +37,7 @@ class SearchBar extends StatelessWidget {
 
 class ApprovedUsersPage extends StatefulWidget {
   const ApprovedUsersPage({
-    required this.isClient,
+    required this.isClient, 
     Key? key,
   }) : super(key: key);
 

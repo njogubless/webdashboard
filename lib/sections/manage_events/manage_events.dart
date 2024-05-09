@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hikers_dash/services/database.dart';
-import 'package:hikers_dash/services/models/client.dart';
 import 'package:hikers_dash/services/models/event.dart';
 import 'package:hikers_dash/services/models/payment.dart';
 
@@ -13,6 +12,8 @@ class ManageEvents extends StatefulWidget {
 
 class _ManageEventsState extends State<ManageEvents> {
   List<Payment> payments = [];
+  List<Event> events = [];
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -22,9 +23,18 @@ class _ManageEventsState extends State<ManageEvents> {
 
   void _loadPayments() async {
     List<Payment> fetchedPayments = await Database.getrecordPayments();
+    List<Event> fetchedEvents = await Database.getAvailableEvents();
     setState(() {
       payments = fetchedPayments;
+      events = fetchedEvents;
     });
+  }
+
+  List<Event> _searchEvents(String searchText) {
+    return events
+        .where((event) =>
+            event.eventName.toLowerCase().contains(searchText.toLowerCase()))
+        .toList();
   }
 
   @override
@@ -127,7 +137,15 @@ class _ManageEventsState extends State<ManageEvents> {
     // Find the payment related to the event
     Payment? payment = payments.firstWhere(
       (payment) => payment.event == event.eventName,
-      orElse: () => Payment(clientName: '', amountPaid: 0, email: '', event: '', mpesaCode: '', totalCost: 0, Status: '', id: ''),
+      orElse: () => Payment(
+          clientName: '',
+          amountPaid: 0,
+          email: '',
+          event: '',
+          mpesaCode: '',
+          totalCost: 0,
+          Status: '',
+          id: ''),
     );
     return payment;
   }
