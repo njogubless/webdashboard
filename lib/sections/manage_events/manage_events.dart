@@ -3,6 +3,44 @@ import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/event.dart';
 import 'package:hikers_dash/services/models/payment.dart';
 
+class SearchBar extends StatelessWidget {
+  final TextEditingController controller;
+  final Function(String) onChanged;
+  final List<String> filterOptions;
+  final String selectedFilter;
+  final Function(String) onSelectedFilter;
+  const SearchBar({
+    Key? key,
+    required this.controller,
+    required this.onChanged,
+    required this.filterOptions,
+    required this.onSelectedFilter,
+    required this.selectedFilter,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.2,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.grey[200],
+      ),
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          hintText: 'Search here...',
+          prefixIcon: Icon(Icons.search),
+          border: InputBorder.none,
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
+        ),
+      ),
+    );
+  }
+}
+
 class ManageEvents extends StatefulWidget {
   const ManageEvents({Key? key}) : super(key: key);
 
@@ -13,12 +51,19 @@ class ManageEvents extends StatefulWidget {
 class _ManageEventsState extends State<ManageEvents> {
   List<Payment> payments = [];
   List<Event> events = [];
+  List<Event> filteredEvents = [];
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _loadEvents();
     _loadPayments();
+  }
+
+  void _loadEvents() async {
+    List<Event> events = await Database.getAvailableEvents();
+    setState(() {});
   }
 
   void _loadPayments() async {
@@ -30,7 +75,29 @@ class _ManageEventsState extends State<ManageEvents> {
     });
   }
 
-  List<Event> _searchEvents(String searchText) {
+  void performSearch(String query) {
+    setState(() {
+      filteredEvents = events.where((event) {
+        // Convert all relevant fields to lowercase for case-insensitive search
+        final String eventName = event.eventName.toLowerCase();
+        final String clientName = _getClientName(event).toLowerCase();
+        final String clientEmail = _getClientEmail(event).toLowerCase();
+        final String eventCost = event.eventCost.toString().toLowerCase();
+        final String eventDate = event.eventDate.toLowerCase();
+        final String eventTime = event.eventTime.toLowerCase();
+
+        // Check if any field contains the search query
+        return eventName.contains(query.toLowerCase()) ||
+            clientName.contains(query.toLowerCase()) ||
+            clientEmail.contains(query.toLowerCase()) ||
+            eventCost.contains(query.toLowerCase()) ||
+            eventDate.contains(query.toLowerCase()) ||
+            eventTime.contains(query.toLowerCase());
+      }).toList();
+    });
+  }
+
+  List<Event> searchEvents(String searchText) {
     return events
         .where((event) =>
             event.eventName.toLowerCase().contains(searchText.toLowerCase()))
@@ -125,7 +192,7 @@ class _ManageEventsState extends State<ManageEvents> {
 
   String _getClientName(Event event) {
     Payment payment = _findPaymentForEvent(event);
-    return payment.clientName ?? 'N/A';
+    return payment.clientName;
   }
 
   String _getClientEmail(Event event) {

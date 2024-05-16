@@ -3,6 +3,39 @@ import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/payment.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+class SearchBar extends StatelessWidget {
+  final TextEditingController controller;
+  final Function(String) onChanged;
+
+  const SearchBar({
+    Key? key, 
+  required this.controller, 
+  required this.onChanged,
+  }): super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width*0.2,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.grey[200],
+      ),
+      child:TextField(
+        controller: controller,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          hintText: 'Search here ...',
+          prefixIcon: Icon(Icons.search),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 10.0,vertical: 14.0),
+          )
+        ),
+      ); 
+    
+  }
+}
+
 class BookedEvents extends StatefulWidget {
   const BookedEvents({Key? key}) : super(key: key);
 
@@ -33,10 +66,14 @@ class _BookedEventsState extends State<BookedEvents> {
     setState(() {
       filteredPayments = allPayments
           .where((payment) =>
-              payment.clientName.toLowerCase().contains(searchText.toLowerCase()) ||
+              payment.clientName
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase()) ||
               payment.email.toLowerCase().contains(searchText.toLowerCase()) ||
               payment.event.toLowerCase().contains(searchText.toLowerCase()) ||
-              payment.mpesaCode.toLowerCase().contains(searchText.toLowerCase()) ||
+              payment.mpesaCode
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase()) ||
               payment.status.toLowerCase().contains(searchText.toLowerCase()))
           .toList();
     });
@@ -47,7 +84,8 @@ class _BookedEventsState extends State<BookedEvents> {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Padding(
-        padding: const EdgeInsets.only(top: 20, left: 50, right: 50), // Adjust the padding as needed
+        padding: const EdgeInsets.only(
+            top: 20, left: 50, right: 50), // Adjust the padding as needed
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +134,8 @@ class _BookedEventsState extends State<BookedEvents> {
                       ],
                       rows: filteredPayments.map((payment) {
                         return DataRow(cells: [
-                          DataCell(Text('${filteredPayments.indexOf(payment) + 1}')),
+                          DataCell(
+                              Text('${filteredPayments.indexOf(payment) + 1}')),
                           DataCell(Text(payment.clientName)),
                           DataCell(Text(payment.email)),
                           DataCell(Text(payment.event)),
