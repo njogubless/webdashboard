@@ -1,6 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+class SearchBar extends StatelessWidget {
+  final TextEditingController controller;
+  final Function(String) onChanged;
+
+  const SearchBar({
+    Key? key,
+    required this.controller,
+    required this.onChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.8,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.grey[200],
+      ),
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          hintText: 'Search partnerships...',
+          prefixIcon: Icon(Icons.search),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
+        ),
+      ),
+    );
+  }
+}
+
 class PartnersPage extends StatefulWidget {
   const PartnersPage({Key? key}) : super(key: key);
 
@@ -68,32 +100,27 @@ class _PartnersPageState extends State<PartnersPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: TextField(
+            child: SearchBar(
               controller: searchController,
-              decoration: InputDecoration(
-                hintText: 'Search partnerships...',
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    _searchPartnerships(searchController.text);
-                  },
-                ),
-              ),
+              onChanged: (value) {
+                _searchPartnerships(value);
+              },
             ),
           ),
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
-                headingRowColor:
-                    MaterialStateColor.resolveWith((states) => const Color.fromARGB(255, 64, 181, 240)),
+                headingRowColor: MaterialStateColor.resolveWith(
+                    (states) => const Color.fromARGB(255, 64, 181, 240)),
                 columns: const [
                   DataColumn(label: Text('Event Name')),
                   DataColumn(label: Text('Partner Name')),
                   DataColumn(label: Text('Partner Type')),
                 ],
                 rows: filteredPartnerships.map((partner) {
-                  Map<String, dynamic> partnerData = partner.data() as Map<String, dynamic>;
+                  Map<String, dynamic> partnerData =
+                      partner.data() as Map<String, dynamic>;
                   return DataRow(cells: [
                     DataCell(Text(partnerData['eventName'] ?? 'N/A')),
                     DataCell(Text(partnerData['partnerName'] ?? 'N/A')),

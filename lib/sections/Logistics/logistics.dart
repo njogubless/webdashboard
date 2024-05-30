@@ -2,11 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hikers_dash/services/models/logistics.dart';
 
+class SearchBar extends StatelessWidget {
+  final TextEditingController controller;
+  final Function(String) onChanged;
+
+  const SearchBar({
+    Key? key,
+    required this.controller,
+    required this.onChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.8,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.grey[200],
+      ),
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          hintText: 'Search logistics...',
+          prefixIcon: Icon(Icons.search),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
+        ),
+      ),
+    );
+  }
+}
+
 class LogisticsPage extends StatefulWidget {
   final List<LogisticsData> logisticsData;
 
-  const LogisticsPage({Key? key, required this.logisticsData})
-      : super(key: key);
+  const LogisticsPage({Key? key, required this.logisticsData}) : super(key: key);
 
   @override
   State<LogisticsPage> createState() => _LogisticsPageState();
@@ -59,18 +90,13 @@ class _LogisticsPageState extends State<LogisticsPage> {
                       ),
                     ),
                   ),
-                  TextField(
+                  SearchBar(
                     controller: searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search logistics...',
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.search),
-                        onPressed: () {
-                          _searchLogisticsData(searchController.text);
-                        },
-                      ),
-                    ),
+                    onChanged: (value) {
+                      _searchLogisticsData(value);
+                    },
                   ),
+                  const SizedBox(height: 20),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
@@ -128,7 +154,6 @@ class _LogisticsPageScreenState extends State<LogisticsPageScreen> {
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('allocations').get();
 
-      print(querySnapshot);
       List<LogisticsData> tempData = [];
 
       querySnapshot.docs.forEach((doc) {

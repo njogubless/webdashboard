@@ -6,16 +6,11 @@ import 'package:hikers_dash/services/models/payment.dart';
 class SearchBar extends StatelessWidget {
   final TextEditingController controller;
   final Function(String) onChanged;
-  final List<String> filterOptions;
-  final String selectedFilter;
-  final Function(String) onSelectedFilter;
+
   const SearchBar({
     Key? key,
     required this.controller,
     required this.onChanged,
-    required this.filterOptions,
-    required this.onSelectedFilter,
-    required this.selectedFilter,
   }) : super(key: key);
 
   @override
@@ -63,22 +58,22 @@ class _ManageEventsState extends State<ManageEvents> {
 
   void _loadEvents() async {
     List<Event> events = await Database.getAvailableEvents();
-    setState(() {});
+    setState(() {
+      this.events = events;
+      this.filteredEvents = events;
+    });
   }
 
   void _loadPayments() async {
     List<Payment> fetchedPayments = await Database.getrecordPayments();
-    List<Event> fetchedEvents = await Database.getAvailableEvents();
     setState(() {
       payments = fetchedPayments;
-      events = fetchedEvents;
     });
   }
 
   void performSearch(String query) {
     setState(() {
       filteredEvents = events.where((event) {
-        // Convert all relevant fields to lowercase for case-insensitive search
         final String eventName = event.eventName.toLowerCase();
         final String clientName = _getClientName(event).toLowerCase();
         final String clientEmail = _getClientEmail(event).toLowerCase();
@@ -86,7 +81,6 @@ class _ManageEventsState extends State<ManageEvents> {
         final String eventDate = event.eventDate.toLowerCase();
         final String eventTime = event.eventTime.toLowerCase();
 
-        // Check if any field contains the search query
         return eventName.contains(query.toLowerCase()) ||
             clientName.contains(query.toLowerCase()) ||
             clientEmail.contains(query.toLowerCase()) ||
@@ -95,13 +89,6 @@ class _ManageEventsState extends State<ManageEvents> {
             eventTime.contains(query.toLowerCase());
       }).toList();
     });
-  }
-
-  List<Event> searchEvents(String searchText) {
-    return events
-        .where((event) =>
-            event.eventName.toLowerCase().contains(searchText.toLowerCase()))
-        .toList();
   }
 
   @override
@@ -122,67 +109,49 @@ class _ManageEventsState extends State<ManageEvents> {
               ),
             ),
             const SizedBox(height: 30),
-            FutureBuilder<List<Event>>(
-              future: Database.getAvailableEvents(),
-              initialData: const [],
-              builder: (context, snapshot) {
-                final events = snapshot.data!;
-                return FittedBox(
-                  child: DataTable(
-                    columns: [
-                      DataColumn(
-                        label: Text('#'),
-                      ),
-                      DataColumn(
-                        label: Text('Event Name'),
-                      ),
-                      DataColumn(
-                        label: Text('Client Name'),
-                      ),
-                      DataColumn(
-                        label: Text('Client Email'),
-                      ),
-                      DataColumn(
-                        label: Text('Event Cost (Ksh)'),
-                      ),
-                      DataColumn(
-                        label: Text('Event Date'),
-                      ),
-                      DataColumn(
-                        label: Text('Event Time'),
-                      ),
-                      DataColumn(
-                        label: Text('Action'),
-                      ),
-                    ],
-                    rows: [
-                      for (final event in events)
-                        DataRow(
-                          cells: [
-                            DataCell(Text('${events.indexOf(event) + 1}')),
-                            DataCell(Text(event.eventName)),
-                            DataCell(Text(_getClientName(event))),
-                            DataCell(Text(_getClientEmail(event))),
-                            DataCell(Text('${event.eventCost}')),
-                            DataCell(Text(event.eventDate)),
-                            DataCell(Text(event.eventTime)),
-                            DataCell(
-                              IconButton(
-                                onPressed: () async {
-                                  _deleteEvent(event);
-                                },
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                    ],
-                  ),
-                );
+            SearchBar(
+              controller: searchController,
+              onChanged: (value) {
+                performSearch(value);
               },
+            ),
+            const SizedBox(height: 30),
+            FittedBox(
+              child: DataTable(
+                columns: const [
+                  DataColumn(label: Text('#')),
+                  DataColumn(label: Text('Event Name')),
+                  DataColumn(label: Text('Client Name')),
+                  DataColumn(label: Text('Client Email')),
+                  DataColumn(label: Text('Event Cost (Ksh)')),
+                  DataColumn(label: Text('Event Date')),
+                  DataColumn(label: Text('Event Time')),
+                  DataColumn(label: Text('Action')),
+                ],
+                rows: filteredEvents.map((event) {
+                  final index = events.indexOf(event) + 1;
+                  return DataRow(cells: [
+                    DataCell(Text('$index')),
+                    DataCell(Text(event.eventName)),
+                    DataCell(Text(_getClientName(event))),
+                    DataCell(Text(_getClientEmail(event))),
+                    DataCell(Text('${event.eventCost}')),
+                    DataCell(Text(event.eventDate)),
+                    DataCell(Text(event.eventTime)),
+                    DataCell(
+                      IconButton(
+                        onPressed: () async {
+                          _deleteEvent(event);
+                        },
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ]);
+                }).toList(),
+              ),
             ),
           ],
         ),
@@ -201,7 +170,6 @@ class _ManageEventsState extends State<ManageEvents> {
   }
 
   Payment _findPaymentForEvent(Event event) {
-    // Find the payment related to the event
     Payment? payment = payments.firstWhere(
       (payment) => payment.event == event.eventName,
       orElse: () => Payment(
@@ -219,13 +187,14 @@ class _ManageEventsState extends State<ManageEvents> {
 
   void _deleteEvent(Event event) async {
     await Database.deleteEvent(event);
-    _loadPayments();
+    _loadEvents();
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Event deleted!'),
       behavior: SnackBarBehavior.floating,
     ));
   }
 }
+
 
 class AvailableEvent extends StatelessWidget {
   const AvailableEvent({
