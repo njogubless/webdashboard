@@ -134,8 +134,8 @@ class _WelcomeSectionState extends State<WelcomeSection> {
 
                     return ListTile(
                       title: Text('USER: ${name}'),
-                      subtitle: Text(
-                          'Status: ${client.status},Role: ${client.role}'),
+                      subtitle:
+                          Text('Status: ${client.status},Role: ${client.role}'),
                     );
                   },
                 ),
