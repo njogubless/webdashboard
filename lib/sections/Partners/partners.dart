@@ -26,7 +26,8 @@ class SearchBar extends StatelessWidget {
           hintText: 'Search partnerships...',
           prefixIcon: Icon(Icons.search),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
         ),
       ),
     );
@@ -55,7 +56,7 @@ class _PartnersPageState extends State<PartnersPage> {
     try {
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('partnerships').get();
-
+ 
       setState(() {
         allPartnerships = querySnapshot.docs;
         filteredPartnerships = allPartnerships;
@@ -67,19 +68,22 @@ class _PartnersPageState extends State<PartnersPage> {
   }
 
   void _searchPartnerships(String searchText) {
+    String searchLower = searchText.toLowerCase().trim();
+
     setState(() {
-      filteredPartnerships = allPartnerships
-          .where((partner) =>
-              (partner['eventName'] as String)
-                  .toLowerCase()
-                  .contains(searchText.toLowerCase()) ||
-              (partner['partnerName'] as String)
-                  .toLowerCase()
-                  .contains(searchText.toLowerCase()) ||
-              (partner['partnerType'] as String)
-                  .toLowerCase()
-                  .contains(searchText.toLowerCase()))
-          .toList();
+      filteredPartnerships = allPartnerships.where((partner) {
+        Map<String, dynamic> data = partner.data() as Map<String, dynamic>;
+
+        String eventName = (data['eventName'] ?? '').toString().toLowerCase();
+        String partnerName = (data['partnerName'] ?? '').toString().toLowerCase();
+        String partnerType = (data['partnerType'] ?? '').toString().toLowerCase();
+        String amountOffered = (data['amountOffered'] ?? '').toString().toLowerCase();
+
+        return eventName.contains(searchLower) ||
+               partnerName.contains(searchLower) ||
+               partnerType.contains(searchLower) ||
+               amountOffered.contains(searchLower);
+      }).toList();
     });
   }
 
@@ -117,14 +121,21 @@ class _PartnersPageState extends State<PartnersPage> {
                   DataColumn(label: Text('Event Name')),
                   DataColumn(label: Text('Partner Name')),
                   DataColumn(label: Text('Partner Type')),
+                  DataColumn(label: Text('Amount Offered')),
                 ],
                 rows: filteredPartnerships.map((partner) {
                   Map<String, dynamic> partnerData =
                       partner.data() as Map<String, dynamic>;
+                  String partnerType = partnerData['partnerType'];
+                  String amountOffered = partnerType == 'Sponsor'
+                      ? partnerData['amountOffered'] ?? 'N/A'
+                      : 'N/A'; // Show amount only for sponsors
+
                   return DataRow(cells: [
-                    DataCell(Text(partnerData['eventName'] ?? 'N/A')),
-                    DataCell(Text(partnerData['partnerName'] ?? 'N/A')),
-                    DataCell(Text(partnerData['partnerType'] ?? 'N/A')),
+                    DataCell(Text(partnerData['eventName'] ?? '')),
+                    DataCell(Text(partnerData['partnerName'] ?? '')),
+                    DataCell(Text(partnerData['partnerType'] ?? '')),
+                    DataCell(Text(amountOffered)),
                   ]);
                 }).toList(),
               ),

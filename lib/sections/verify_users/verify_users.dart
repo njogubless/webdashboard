@@ -5,11 +5,13 @@ import 'package:hikers_dash/services/models/client.dart';
 class SearchBar extends StatelessWidget {
   final TextEditingController controller;
   final Function(String) onChanged;
+  final bool isClient;
 
   const SearchBar({
     Key? key,
     required this.controller,
     required this.onChanged,
+    required this.isClient,
   }) : super(key: key);
 
   @override
@@ -24,7 +26,7 @@ class SearchBar extends StatelessWidget {
         controller: controller,
         onChanged: onChanged,
         decoration: InputDecoration(
-          hintText: 'Search here...',
+          hintText: isClient ? 'Search clients...' : 'Search employees...',
           prefixIcon: Icon(Icons.search),
           border: InputBorder.none,
           contentPadding:
@@ -37,7 +39,7 @@ class SearchBar extends StatelessWidget {
 
 class ApprovedUsersPage extends StatefulWidget {
   const ApprovedUsersPage({
-    required this.isClient, 
+    required this.isClient,
     Key? key,
   }) : super(key: key);
 
@@ -63,10 +65,13 @@ class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
 
   void _loadData() async {
     List<Client> clients = await Database.getClients();
-
     setState(() {
-      _clients = clients;
-      _filteredClients = clients;
+      _clients = clients
+          .where((client) => widget.isClient
+              ? client.role == 'client'
+              : client.role != 'client')
+          .toList();
+      _filteredClients = _clients;
     });
   }
 
@@ -75,16 +80,6 @@ class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
       _filteredClients = _clients
           .where((client) =>
               client.clientName.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    });
-  }
-
-  void _filterClients() {
-    setState(() {
-      _filteredClients = _filteredClients
-          .where((client) =>
-              (widget.isClient && client.role == 'client') ||
-              (!widget.isClient && client.role != 'client'))
           .toList();
     });
   }
@@ -98,9 +93,8 @@ class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
   // Function to build the table rows
   Widget buildTable(List<Client> users) {
     return DataTable(
-      headingRowColor: MaterialStateColor.resolveWith(
-        (states) => Colors.blueAccent,
-      ),
+      headingRowColor:
+          MaterialStateColor.resolveWith((states) => Colors.blueAccent),
       columns: [
         DataColumn(label: Text('Name')),
         DataColumn(label: Text('Email')),
@@ -143,8 +137,8 @@ class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
                   controller: _searchController,
                   onChanged: (value) {
                     _performSearch(value);
-                    _filterClients();
                   },
+                  isClient: widget.isClient,
                 ),
               ],
             ),
@@ -163,8 +157,6 @@ class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
   }
 }
 
-
-
 class PendingUsersPage extends StatelessWidget {
   const PendingUsersPage({
     required this.isClient,
@@ -173,7 +165,7 @@ class PendingUsersPage extends StatelessWidget {
 
   final bool isClient;
 
-//function to approve a client
+  // function to approve a client
   void approveClient(Client client) {
     Database.verifyUser(client).then((_) {
       // Handle UI updates or refresh here
@@ -184,12 +176,12 @@ class PendingUsersPage extends StatelessWidget {
     });
   }
 
-//function to reject a client
-  void rejectclient(Client client) {
-    //call a function from the database to change the satus
-    //from 'pending' to 'rejected'
+  // function to reject a client
+  void rejectClient(Client client) {
+    // call a function from the database to change the status
+    // from 'pending' to 'rejected'
     Database.rejectClient(client).then((_) {
-      //handle UI updates or refresh here
+      // handle UI updates or refresh here
     }).catchError((error) {
       print('Error rejecting client: $error');
     });
@@ -222,7 +214,7 @@ class PendingUsersPage extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.close), // Action to reject user
                 onPressed: () {
-                  rejectclient(user); // Call your rejection function
+                  rejectClient(user); // Call your rejection function
                 },
               ),
             ],

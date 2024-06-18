@@ -115,7 +115,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
               children: [
                 InfoTile(
                   title: 'Verified users',
-                  stat: _clients!
+                  stat: _clients
                       .where((client) => client.status == 'Verified')
                       .length,
                   icon: Icons.person,

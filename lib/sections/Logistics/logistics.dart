@@ -27,7 +27,8 @@ class SearchBar extends StatelessWidget {
           hintText: 'Search logistics...',
           prefixIcon: Icon(Icons.search),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
         ),
       ),
     );
@@ -37,7 +38,8 @@ class SearchBar extends StatelessWidget {
 class LogisticsPage extends StatefulWidget {
   final List<LogisticsData> logisticsData;
 
-  const LogisticsPage({Key? key, required this.logisticsData}) : super(key: key);
+  const LogisticsPage({Key? key, required this.logisticsData})
+      : super(key: key);
 
   @override
   State<LogisticsPage> createState() => _LogisticsPageState();
@@ -100,8 +102,8 @@ class _LogisticsPageState extends State<LogisticsPage> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
-                      headingRowColor:
-                          MaterialStateColor.resolveWith((states) => Colors.blueGrey),
+                      headingRowColor: MaterialStateColor.resolveWith(
+                          (states) => Colors.blueGrey),
                       columns: [
                         DataColumn(label: Text('Event Name')),
                         DataColumn(label: Text('Driver')),
@@ -154,22 +156,23 @@ class _LogisticsPageScreenState extends State<LogisticsPageScreen> {
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('allocations').get();
 
-      List<LogisticsData> tempData = [];
-
-      querySnapshot.docs.forEach((doc) {
-        tempData.add(LogisticsData(
-          eventName: doc['event'] ?? '',
-          driver: doc['driver'] ?? '',
-          guide: doc['guide'] ?? '',
-        ));
-      });
+      List<LogisticsData> tempData = querySnapshot.docs.map((doc) {
+        print("Document data: ${doc.data()}"); // Debug log for document data
+        return LogisticsData(
+          eventName: doc['event'] ?? 'N/A',
+          driver: doc['driver'] ?? 'N/A',
+          guide: doc['guide'] ?? 'N/A',
+        );
+      }).toList();
 
       setState(() {
         logisticsData = tempData;
       });
+      print(
+          "Logistics data loaded successfully"); // Debug log for successful data load
     } catch (e) {
       // Handle any errors that might occur
-      print("Error fetching logistics data: $e");
+      print("Error fetching logistics data: $e"); // Debug log for error
     }
   }
 
