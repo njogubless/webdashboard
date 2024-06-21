@@ -3,38 +3,6 @@ import 'package:hikers_dash/sections/welcome/info_tile.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/client.dart';
 
-class SearchBar extends StatelessWidget {
-  final TextEditingController controller;
-  final Function(String) onChanged;
-
-  const SearchBar({
-    Key? key,
-    required this.controller,
-    required this.onChanged,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.2,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        color: Colors.grey[200],
-      ),
-      child: TextField(
-        controller: controller,
-        onChanged: onChanged,
-        decoration: InputDecoration(
-          hintText: 'Search here...',
-          prefixIcon: Icon(Icons.search),
-          border: InputBorder.none,
-          contentPadding:
-              EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
-        ),
-      ),
-    );
-  }
-}
 
 class WelcomeSection extends StatefulWidget {
   const WelcomeSection({
@@ -49,16 +17,16 @@ class WelcomeSection extends StatefulWidget {
 }
 
 class _WelcomeSectionState extends State<WelcomeSection> {
-  late TextEditingController _searchController;
+  //late TextEditingController _searchController;
   late List<Client> _clients;
-  late List<Client> _filteredClients;
+  //late List<Client> _filteredClients;
 
   @override
   void initState() {
     super.initState();
-    _searchController = TextEditingController();
+    //_searchController = TextEditingController();
     _clients = [];
-    _filteredClients = [];
+    //_filteredClients = [];
     _loadData();
   }
 
@@ -67,22 +35,22 @@ class _WelcomeSectionState extends State<WelcomeSection> {
 
     setState(() {
       _clients = clients;
-      _filteredClients = clients;
+      //_filteredClients = clients;
     });
   }
 
-  void _performSearch(String query) {
-    setState(() {
-      _filteredClients = _clients
-          .where((client) =>
-              client.clientName.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    });
-  }
+  // void _performSearch(String query) {
+  //   setState(() {
+  //     _filteredClients = _clients
+  //         .where((client) =>
+  //             client.clientName.toLowerCase().contains(query.toLowerCase()))
+  //         .toList();
+  //   });
+  // }
 
   @override
   void dispose() {
-    _searchController.dispose();
+    //_searchController.dispose();
     super.dispose();
   }
 
@@ -108,38 +76,38 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                     color: Colors.indigo,
                   ),
                 ),
-                Row(
-                  children: [
-                    Icon(Icons.search),
-                    SizedBox(width: 10),
-                    SearchBar(
-                      controller: _searchController,
-                      onChanged: (value) {
-                        _performSearch(value);
-                      },
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Icon(Icons.search),
+                //     SizedBox(width: 10),
+                //     SearchBar(
+                //       controller: _searchController,
+                //       onChanged: (value) {
+                //         _performSearch(value);
+                //       },
+                //     ),
+                //   ],
+                // ),
               ],
             ),
-            SizedBox(height: 20),
-            // Display search results
-            if (_searchController.text.isNotEmpty)
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _filteredClients.length,
-                  itemBuilder: (context, index) {
-                    var client = _filteredClients[index];
-                    var name = client.clientName;
+            // SizedBox(height: 20),
+            // // Display search results
+            // if (_searchController.text.isNotEmpty)
+            //   Expanded(
+            //     child: ListView.builder(
+            //       itemCount: _filteredClients.length,
+            //       itemBuilder: (context, index) {
+            //         var client = _filteredClients[index];
+            //         var name = client.clientName;
 
-                    return ListTile(
-                      title: Text('USER: ${name}'),
-                      subtitle:
-                          Text('Status: ${client.status},Role: ${client.role}'),
-                    );
-                  },
-                ),
-              ),
+            //         return ListTile(
+            //           title: Text('USER: ${name}'),
+            //           subtitle: Text(
+            //               'Status: ${client.status},Role: ${client.role}'),
+            //         );
+            //       },
+            //     ),
+            //   ),
             SizedBox(height: 20),
             // Other widgets below
             Row(
@@ -147,7 +115,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
               children: [
                 InfoTile(
                   title: 'Verified users',
-                  stat: _clients!
+                  stat: _clients
                       .where((client) => client.status == 'Verified')
                       .length,
                   icon: Icons.person,

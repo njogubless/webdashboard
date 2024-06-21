@@ -2,11 +2,69 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hikers_dash/services/models/logistics.dart';
 
-class LogisticsPage extends StatelessWidget {
+class SearchBar extends StatelessWidget {
+  final TextEditingController controller;
+  final Function(String) onChanged;
+
+  const SearchBar({
+    Key? key,
+    required this.controller,
+    required this.onChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.8,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.grey[200],
+      ),
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          hintText: 'Search logistics...',
+          prefixIcon: Icon(Icons.search),
+          border: InputBorder.none,
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
+        ),
+      ),
+    );
+  }
+}
+
+class LogisticsPage extends StatefulWidget {
   final List<LogisticsData> logisticsData;
 
   const LogisticsPage({Key? key, required this.logisticsData})
       : super(key: key);
+
+  @override
+  State<LogisticsPage> createState() => _LogisticsPageState();
+}
+
+class _LogisticsPageState extends State<LogisticsPage> {
+  TextEditingController searchController = TextEditingController();
+  List<LogisticsData> filteredLogisticsData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredLogisticsData = widget.logisticsData;
+  }
+
+  void _searchLogisticsData(String searchText) {
+    setState(() {
+      filteredLogisticsData = widget.logisticsData
+          .where((data) =>
+              data.eventName.toLowerCase().contains(searchText.toLowerCase()) ||
+              data.driver.toLowerCase().contains(searchText.toLowerCase()) ||
+              data.guide.toLowerCase().contains(searchText.toLowerCase()))
+          .toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +92,13 @@ class LogisticsPage extends StatelessWidget {
                       ),
                     ),
                   ),
+                  SearchBar(
+                    controller: searchController,
+                    onChanged: (value) {
+                      _searchLogisticsData(value);
+                    },
+                  ),
+                  const SizedBox(height: 20),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
@@ -44,7 +109,7 @@ class LogisticsPage extends StatelessWidget {
                         DataColumn(label: Text('Driver')),
                         DataColumn(label: Text('Guide')),
                       ],
-                      rows: logisticsData.map((data) {
+                      rows: filteredLogisticsData.map((data) {
                         return DataRow(cells: [
                           DataCell(Container(
                             padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -91,23 +156,23 @@ class _LogisticsPageScreenState extends State<LogisticsPageScreen> {
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('allocations').get();
 
-      print(querySnapshot);
-      List<LogisticsData> tempData = [];
-
-      querySnapshot.docs.forEach((doc) {
-        tempData.add(LogisticsData(
-          eventName: doc['event'] ?? '',
-          driver: doc['driver'] ?? '',
-          guide: doc['guide'] ?? '',
-        ));
-      });
+      List<LogisticsData> tempData = querySnapshot.docs.map((doc) {
+        print("Document data: ${doc.data()}"); // Debug log for document data
+        return LogisticsData(
+          eventName: doc['event'] ?? 'N/A',
+          driver: doc['driver'] ?? 'N/A',
+          guide: doc['guide'] ?? 'N/A',
+        );
+      }).toList();
 
       setState(() {
         logisticsData = tempData;
       });
+      print(
+          "Logistics data loaded successfully"); // Debug log for successful data load
     } catch (e) {
       // Handle any errors that might occur
-      print("Error fetching logistics data: $e");
+      print("Error fetching logistics data: $e"); // Debug log for error
     }
   }
 

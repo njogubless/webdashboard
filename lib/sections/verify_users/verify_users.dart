@@ -2,7 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/client.dart';
 
-class ApprovedUsersPage extends StatelessWidget {
+class SearchBar extends StatelessWidget {
+  final TextEditingController controller;
+  final Function(String) onChanged;
+  final bool isClient;
+
+  const SearchBar({
+    Key? key,
+    required this.controller,
+    required this.onChanged,
+    required this.isClient,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.2,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.grey[200],
+      ),
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          hintText: isClient ? 'Search clients...' : 'Search employees...',
+          prefixIcon: Icon(Icons.search),
+          border: InputBorder.none,
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
+        ),
+      ),
+    );
+  }
+}
+
+class ApprovedUsersPage extends StatefulWidget {
   const ApprovedUsersPage({
     required this.isClient,
     Key? key,
@@ -10,10 +45,55 @@ class ApprovedUsersPage extends StatelessWidget {
 
   final bool isClient;
 
+  @override
+  _ApprovedUsersPageState createState() => _ApprovedUsersPageState();
+}
+
+class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
+  late List<Client> _clients;
+  late List<Client> _filteredClients;
+  late TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _clients = [];
+    _filteredClients = [];
+    _searchController = TextEditingController();
+    _loadData();
+  }
+
+  void _loadData() async {
+    List<Client> clients = await Database.getClients();
+    setState(() {
+      _clients = clients
+          .where((client) => widget.isClient
+              ? client.role == 'client'
+              : client.role != 'client')
+          .toList();
+      _filteredClients = _clients;
+    });
+  }
+
+  void _performSearch(String query) {
+    setState(() {
+      _filteredClients = _clients
+          .where((client) =>
+              client.clientName.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   // Function to build the table rows
   Widget buildTable(List<Client> users) {
     return DataTable(
-        headingRowColor:
+      headingRowColor:
           MaterialStateColor.resolveWith((states) => Colors.blueAccent),
       columns: [
         DataColumn(label: Text('Name')),
@@ -45,36 +125,33 @@ class ApprovedUsersPage extends StatelessWidget {
           ),
         ),
       ),
-      body: FutureBuilder<List<Client>>(
-        future: Database.getApprovedClients(),
-        initialData: [],
-        builder: (context, snapshot) {
-          final approvedUsers = snapshot.data!
-              .where((element) => isClient
-                  ? element.role == 'client'
-                  : element.role != 'client')
-              .toList();
-          return approvedUsers.isEmpty
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 70),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 18),
-                      child: Text(
-                        'No approved users',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                  ],
-                )
-              : SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: buildTable(approvedUsers),
-                  ),
-                );
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Icon(Icons.search),
+                SizedBox(width: 10),
+                SearchBar(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    _performSearch(value);
+                  },
+                  isClient: widget.isClient,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: buildTable(_filteredClients),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -88,7 +165,7 @@ class PendingUsersPage extends StatelessWidget {
 
   final bool isClient;
 
-//function to approve a client
+  // function to approve a client
   void approveClient(Client client) {
     Database.verifyUser(client).then((_) {
       // Handle UI updates or refresh here
@@ -99,12 +176,12 @@ class PendingUsersPage extends StatelessWidget {
     });
   }
 
-//function to reject a client
-  void rejectclient(Client client) {
-    //call a function from the database to change the satus
-    //from 'pending' to 'rejected'
+  // function to reject a client
+  void rejectClient(Client client) {
+    // call a function from the database to change the status
+    // from 'pending' to 'rejected'
     Database.rejectClient(client).then((_) {
-      //handle UI updates or refresh here
+      // handle UI updates or refresh here
     }).catchError((error) {
       print('Error rejecting client: $error');
     });
@@ -137,7 +214,7 @@ class PendingUsersPage extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.close), // Action to reject user
                 onPressed: () {
-                  rejectclient(user); // Call your rejection function
+                  rejectClient(user); // Call your rejection function
                 },
               ),
             ],
