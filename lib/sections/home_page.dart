@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hikers_dash/sections/Logistics/logistics.dart';
 import 'package:hikers_dash/sections/Partners/partners.dart';
-import 'package:hikers_dash/sections/booked_events/booked_events.dart';
+import 'package:hikers_dash/sections/finance_details/finance_details.dart';
 import 'package:hikers_dash/sections/add_events/add_events.dart';
 import 'package:hikers_dash/sections/manage_events/manage_events.dart';
 import 'package:hikers_dash/sections/ratings/ratings.dart';

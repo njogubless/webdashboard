@@ -109,7 +109,7 @@ class _BookedEventsState extends State<BookedEvents> {
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
                   columns: [
-                    DataColumn(label: Text('#')),
+                    DataColumn(label: Text('UID')),
                     DataColumn(label: Text('Client Name')),
                     DataColumn(label: Text('Client Email')),
                     DataColumn(label: Text('Event')),
@@ -120,7 +120,8 @@ class _BookedEventsState extends State<BookedEvents> {
                   ],
                   rows: filteredPayments.map((payment) {
                     return DataRow(cells: [
-                      DataCell(Text('${filteredPayments.indexOf(payment) + 1}')),
+                       DataCell(Text(payment.id)),
+                      //DataCell(Text('${filteredPayments.indexOf(payment) + 1}')),
                       DataCell(Text(payment.clientName)),
                       DataCell(Text(payment.email)),
                       DataCell(Text(payment.event)),

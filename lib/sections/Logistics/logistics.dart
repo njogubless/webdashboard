@@ -35,29 +35,51 @@ class SearchBar extends StatelessWidget {
   }
 }
 
-class LogisticsPage extends StatefulWidget {
-  final List<LogisticsData> logisticsData;
 
-  const LogisticsPage({Key? key, required this.logisticsData})
-      : super(key: key);
-
+class LogisticsPageScreen extends StatefulWidget {
   @override
-  State<LogisticsPage> createState() => _LogisticsPageState();
+  _LogisticsPageScreenState createState() => _LogisticsPageScreenState();
 }
 
-class _LogisticsPageState extends State<LogisticsPage> {
-  TextEditingController searchController = TextEditingController();
+class _LogisticsPageScreenState extends State<LogisticsPageScreen> {
+  List<LogisticsData> tempData = [];
   List<LogisticsData> filteredLogisticsData = [];
+   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    filteredLogisticsData = widget.logisticsData;
+    fetchLogisticsData();
   }
 
-  void _searchLogisticsData(String searchText) {
+  Future<void> fetchLogisticsData() async {
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('allocations').get();
+
+      tempData = querySnapshot.docs.map((doc) {
+        print("Document data: ${doc.data()}"); // Debug log for document data
+        return LogisticsData(
+          eventName: doc['event'] ?? 'N/A',
+          driver: doc['driver'] ?? 'N/A',
+          guide: doc['guide'] ?? 'N/A',
+        );
+      }).toList();
+
+      setState(() {
+        filteredLogisticsData = tempData;
+      });
+      print(
+          "Logistics data loaded successfully"); // Debug log for successful data load
+    } catch (e) {
+      // Handle any errors that might occur
+      print("Error fetching logistics data: $e"); // Debug log for error
+    }
+  }
+
+    void _searchLogisticsData(String searchText) {
     setState(() {
-      filteredLogisticsData = widget.logisticsData
+      filteredLogisticsData = tempData
           .where((data) =>
               data.eventName.toLowerCase().contains(searchText.toLowerCase()) ||
               data.driver.toLowerCase().contains(searchText.toLowerCase()) ||
@@ -134,50 +156,5 @@ class _LogisticsPageState extends State<LogisticsPage> {
         ),
       ),
     );
-  }
-}
-
-class LogisticsPageScreen extends StatefulWidget {
-  @override
-  _LogisticsPageScreenState createState() => _LogisticsPageScreenState();
-}
-
-class _LogisticsPageScreenState extends State<LogisticsPageScreen> {
-  List<LogisticsData> logisticsData = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchLogisticsData();
-  }
-
-  Future<void> fetchLogisticsData() async {
-    try {
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('allocations').get();
-
-      List<LogisticsData> tempData = querySnapshot.docs.map((doc) {
-        print("Document data: ${doc.data()}"); // Debug log for document data
-        return LogisticsData(
-          eventName: doc['event'] ?? 'N/A',
-          driver: doc['driver'] ?? 'N/A',
-          guide: doc['guide'] ?? 'N/A',
-        );
-      }).toList();
-
-      setState(() {
-        logisticsData = tempData;
-      });
-      print(
-          "Logistics data loaded successfully"); // Debug log for successful data load
-    } catch (e) {
-      // Handle any errors that might occur
-      print("Error fetching logistics data: $e"); // Debug log for error
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return LogisticsPage(logisticsData: logisticsData);
   }
 }

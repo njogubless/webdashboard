@@ -96,12 +96,14 @@ class _ApprovedUsersPageState extends State<ApprovedUsersPage> {
       headingRowColor:
           MaterialStateColor.resolveWith((states) => Colors.blueAccent),
       columns: [
+        DataColumn(label: Text('UID')),
         DataColumn(label: Text('Name')),
         DataColumn(label: Text('Email')),
         DataColumn(label: Text('Role')),
       ],
       rows: users.map((user) {
         return DataRow(cells: [
+          DataCell(Text('${user.uid}')), // Display UID
           DataCell(Text(user.clientName)), // Display Name
           DataCell(Text(user.clientEmail)), // Display Email
           DataCell(Text(user.role)), // Display Role
@@ -193,6 +195,7 @@ class PendingUsersPage extends StatelessWidget {
       headingRowColor:
           MaterialStateColor.resolveWith((states) => Colors.blueAccent),
       columns: [
+         DataColumn(label: Text('UID')),
         DataColumn(label: Text('Name')),
         DataColumn(label: Text('Email')),
         DataColumn(label: Text('Role')),
@@ -200,6 +203,7 @@ class PendingUsersPage extends StatelessWidget {
       ],
       rows: users.map((user) {
         return DataRow(cells: [
+          DataCell(Text('${user.uid}')), // Display UID
           DataCell(Text(user.clientName)), // Display Name
           DataCell(Text(user.clientEmail)), // Display Email
           DataCell(Text(user.role)), // Display Role
@@ -298,6 +302,7 @@ class RejectedUsersPage extends StatelessWidget {
       headingRowColor:
           MaterialStateColor.resolveWith((states) => Colors.blueAccent),
       columns: [
+        DataColumn(label: Text('UID')),
         DataColumn(label: Text('Name')),
         DataColumn(label: Text('Email')),
         DataColumn(label: Text('Role')),
@@ -305,6 +310,7 @@ class RejectedUsersPage extends StatelessWidget {
       ],
       rows: users.map((user) {
         return DataRow(cells: [
+           DataCell(Text('${user.uid}')), // Display UID
           DataCell(Text(user.clientName)), // Display Name
           DataCell(Text(user.clientEmail)), // Display Email
           DataCell(Text(user.role)), // Display Role

@@ -119,7 +119,8 @@ class _ManageEventsState extends State<ManageEvents> {
             FittedBox(
               child: DataTable(
                 columns: const [
-                  DataColumn(label: Text('#')),
+                  DataColumn(label: Text('Client UID')),
+                  //DataColumn(label: Text('#')),
                   DataColumn(label: Text('Event Name')),
                   DataColumn(label: Text('Client Name')),
                   DataColumn(label: Text('Client Email')),
@@ -131,10 +132,11 @@ class _ManageEventsState extends State<ManageEvents> {
                 rows: filteredEvents.map((event) {
                   final index = events.indexOf(event) + 1;
                   return DataRow(cells: [
-                    DataCell(Text('$index')),
-                    DataCell(Text(event.eventName)),
+                    //DataCell(Text('$index')),
+                    DataCell(Text(_getClientUid(event))),
                     DataCell(Text(_getClientName(event))),
                     DataCell(Text(_getClientEmail(event))),
+                    DataCell(Text(event.eventName)),
                     DataCell(Text('${event.eventCost}')),
                     DataCell(Text(event.eventDate)),
                     DataCell(Text(event.eventTime)),
@@ -169,6 +171,11 @@ class _ManageEventsState extends State<ManageEvents> {
     return payment.email;
   }
 
+  String _getClientUid(Event event) {
+    Payment payment = _findPaymentForEvent(event);
+    return payment.id; // Assuming `id` is the `uid`
+  }
+
   Payment _findPaymentForEvent(Event event) {
     Payment? payment = payments.firstWhere(
       (payment) => payment.event == event.eventName,
@@ -194,7 +201,6 @@ class _ManageEventsState extends State<ManageEvents> {
     ));
   }
 }
-
 
 class AvailableEvent extends StatelessWidget {
   const AvailableEvent({
