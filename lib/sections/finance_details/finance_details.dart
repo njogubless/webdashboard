@@ -115,7 +115,7 @@ class _BookedEventsState extends State<BookedEvents> {
                     DataColumn(label: Text('Event')),
                     DataColumn(label: Text('M-Pesa Code')),
                     DataColumn(label: Text('Total Cost (Ksh)')),
-                    DataColumn(label: Text('Status')),
+                    //DataColumn(label: Text('Status')),
                     DataColumn(label: Text('Action')),
                   ],
                   rows: filteredPayments.map((payment) {
@@ -127,7 +127,7 @@ class _BookedEventsState extends State<BookedEvents> {
                       DataCell(Text(payment.event)),
                       DataCell(Text(payment.mpesaCode)),
                       DataCell(Text('${payment.totalCost}')),
-                      DataCell(Text(payment.status ?? 'Unknown')),
+                      //DataCell(Text(payment.status ?? 'Unknown')),
                       DataCell(
                         IconButton(
                           onPressed: () {
