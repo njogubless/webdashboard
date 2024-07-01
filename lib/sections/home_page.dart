@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hikers_dash/sections/Logistics/logistics.dart';
 import 'package:hikers_dash/sections/Partners/partners.dart';
+import 'package:hikers_dash/sections/Ratings/Ratings.dart';
 import 'package:hikers_dash/sections/finance_details/finance_details.dart';
 import 'package:hikers_dash/sections/add_events/add_events.dart';
 import 'package:hikers_dash/sections/manage_events/manage_events.dart';
-import 'package:hikers_dash/sections/ratings/ratings.dart';
+import 'package:hikers_dash/sections/Feedbacks/Feedback.dart';
 import 'package:hikers_dash/sections/settings/settings.dart';
 import 'package:hikers_dash/sections/verify_users/verify_users.dart';
 import 'package:hikers_dash/sections/welcome/welcome.dart';
@@ -55,13 +56,15 @@ class _HomeNavigationState extends State<HomeNavigation> {
       case 7:
         return const BookedEvents();
       case 8:
-        return const RatingsPage();
+        return const FeedbackPage();
       case 9:
         return const SettingsPage();
       case 10:
         return LogisticsPageScreen();
       case 11:
         return const PartnersPage();
+      case 12:
+        return const RatingPage();
       default:
         AuthService().signOut();
         return const Center();
@@ -140,9 +143,14 @@ class _HomeNavigationState extends State<HomeNavigation> {
                     onTap: () => switchToSection(10, false),
                   ),
                   ListTile(
+                    leading: Icon(Icons.rate_review),
+                    title: const Text('Feedbacks'),
+                    onTap:() => switchToSection(8,false)
+                  ),
+                  ListTile(
                     leading: Icon(Icons.reviews_outlined),
                     title: const Text('Ratings'),
-                    onTap: () => switchToSection(8, false),
+                    onTap: () => switchToSection(12, false),
                   ),
                   ListTile(
                     leading: Icon(Icons.settings),
