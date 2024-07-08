@@ -297,7 +297,7 @@ static Future<void> rejectClient(Client client) async {
 
   static Future<int> getNumberOfEvents() async {
     final result = await firestore.collection('events').count().get();
-    return result.count;
+    return result.count ?? 0;
   }
 
   // Get number booked
@@ -307,7 +307,7 @@ static Future<void> rejectClient(Client client) async {
         .where('eventID', isEqualTo: eventID)
         .count()
         .get();
-    return result.count;
+    return result.count?? 0;
   }
 
   // Retrieve available events

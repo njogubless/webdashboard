@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/event.dart';
@@ -91,6 +92,22 @@ class _ManageEventsState extends State<ManageEvents> {
     });
   }
 
+  Future<List<Map<String, dynamic>>> _fetchEventRatings(String eventId) async {
+    print('Fetching ratings for event ID: $eventId');
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('rates')
+          .where('eventId', isEqualTo: eventId)
+          .get();
+      final ratings = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+      print('Fetched ratings: $ratings');
+      return ratings;
+    } catch (e) {
+      print('Error fetching ratings: $e');
+      return [];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -120,26 +137,67 @@ class _ManageEventsState extends State<ManageEvents> {
               child: DataTable(
                 columns: const [
                   DataColumn(label: Text('Client UID')),
-                  //DataColumn(label: Text('#')),
                   DataColumn(label: Text('Event Name')),
                   DataColumn(label: Text('Client Name')),
                   DataColumn(label: Text('Client Email')),
                   DataColumn(label: Text('Event Cost (Ksh)')),
                   DataColumn(label: Text('Event Date')),
                   DataColumn(label: Text('Event Time')),
+                  DataColumn(label: Text('Rating')),
+                  DataColumn(label: Text('Comment')),
                   DataColumn(label: Text('Action')),
                 ],
                 rows: filteredEvents.map((event) {
-                  final index = events.indexOf(event) + 1;
                   return DataRow(cells: [
-                    //DataCell(Text('$index')),
                     DataCell(Text(_getClientUid(event))),
+                    DataCell(Text(event.eventName)),
                     DataCell(Text(_getClientName(event))),
                     DataCell(Text(_getClientEmail(event))),
-                    DataCell(Text(event.eventName)),
                     DataCell(Text('${event.eventCost}')),
                     DataCell(Text(event.eventDate)),
                     DataCell(Text(event.eventTime)),
+                    DataCell(FutureBuilder<List<Map<String, dynamic>>>(
+                      future: _fetchEventRatings(event.eventID),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        if (snapshot.hasError) {
+                          return const Text('Error');
+                        }
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return const Text('No Ratings');
+                        }
+                        final ratings = snapshot.data!;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: ratings.map((rating) {
+                            return Text('Rating: ${rating['rating']}');
+                          }).toList(),
+                        );
+                      },
+                    )),
+                    DataCell(FutureBuilder<List<Map<String, dynamic>>>(
+                      future: _fetchEventRatings(event.eventID),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        if (snapshot.hasError) {
+                          return const Text('Error');
+                        }
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return const Text('No Comments');
+                        }
+                        final comments = snapshot.data!;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: comments.map((rating) {
+                            return Text('Comment: ${rating['comment']}');
+                          }).toList(),
+                        );
+                      },
+                    )),
                     DataCell(
                       IconButton(
                         onPressed: () async {
