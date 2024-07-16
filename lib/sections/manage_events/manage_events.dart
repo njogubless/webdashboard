@@ -92,21 +92,30 @@ class _ManageEventsState extends State<ManageEvents> {
     });
   }
 
-  Future<List<Map<String, dynamic>>> _fetchEventRatings(String eventId) async {
-    print('Fetching ratings for event ID: $eventId');
-    try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('rates')
-          .where('eventId', isEqualTo: eventId)
-          .get();
-      final ratings = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-      print('Fetched ratings: $ratings');
-      return ratings;
-    } catch (e) {
-      print('Error fetching ratings: $e');
-      return [];
-    }
-  }
+  // Future<List<Map<String, dynamic>>> _fetchEventRatings(String eventName) async {
+  //   print('Fetching ratings for event name: $eventName');
+  //   try {
+  //     QuerySnapshot snapshot = await FirebaseFirestore.instance
+  //         .collection('rates')
+  //         .where('eventName', isEqualTo: eventName)
+  //         .get();
+  //     if (snapshot.docs.isEmpty) {
+  //       print('No ratings found for event name: $eventName');
+  //       return [];
+  //     }
+
+  //     final ratings = snapshot.docs.map((doc) {
+  //       print('Fetched rating document: ${doc.data()}');
+  //       return doc.data() as Map<String, dynamic>;
+  //     }).toList();
+
+  //     print('Fetched ratings: $ratings');
+  //     return ratings;
+  //   } catch (e) {
+  //     print('Error fetching ratings: $e');
+  //     return [];
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -143,8 +152,8 @@ class _ManageEventsState extends State<ManageEvents> {
                   DataColumn(label: Text('Event Cost (Ksh)')),
                   DataColumn(label: Text('Event Date')),
                   DataColumn(label: Text('Event Time')),
-                  DataColumn(label: Text('Rating')),
-                  DataColumn(label: Text('Comment')),
+                  //DataColumn(label: Text('Rating')),
+                  //DataColumn(label: Text('Comment')),
                   DataColumn(label: Text('Action')),
                 ],
                 rows: filteredEvents.map((event) {
@@ -156,48 +165,48 @@ class _ManageEventsState extends State<ManageEvents> {
                     DataCell(Text('${event.eventCost}')),
                     DataCell(Text(event.eventDate)),
                     DataCell(Text(event.eventTime)),
-                    DataCell(FutureBuilder<List<Map<String, dynamic>>>(
-                      future: _fetchEventRatings(event.eventID),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        }
-                        if (snapshot.hasError) {
-                          return const Text('Error');
-                        }
-                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return const Text('No Ratings');
-                        }
-                        final ratings = snapshot.data!;
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: ratings.map((rating) {
-                            return Text('Rating: ${rating['rating']}');
-                          }).toList(),
-                        );
-                      },
-                    )),
-                    DataCell(FutureBuilder<List<Map<String, dynamic>>>(
-                      future: _fetchEventRatings(event.eventID),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        }
-                        if (snapshot.hasError) {
-                          return const Text('Error');
-                        }
-                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return const Text('No Comments');
-                        }
-                        final comments = snapshot.data!;
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: comments.map((rating) {
-                            return Text('Comment: ${rating['comment']}');
-                          }).toList(),
-                        );
-                      },
-                    )),
+                    // DataCell(FutureBuilder<List<Map<String, dynamic>>>(
+                    //   future: _fetchEventRatings(event.eventName),
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.connectionState == ConnectionState.waiting) {
+                    //       return const CircularProgressIndicator();
+                    //     }
+                    //     if (snapshot.hasError) {
+                    //       return const Text('Error');
+                    //     }
+                    //     if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    //       return const Text('No Ratings');
+                    //     }
+                    //     final ratings = snapshot.data!;
+                    //     return Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: ratings.map((rating) {
+                    //         return Text('Rating: ${rating['rating']}');
+                    //       }).toList(),
+                    //     );
+                    //   },
+                    // )),
+                    // DataCell(FutureBuilder<List<Map<String, dynamic>>>(
+                    //   future: _fetchEventRatings(event.eventName),
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.connectionState == ConnectionState.waiting) {
+                    //       return const CircularProgressIndicator();
+                    //     }
+                    //     if (snapshot.hasError) {
+                    //       return const Text('Error');
+                    //     }
+                    //     if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    //       return const Text('No Comments');
+                    //     }
+                    //     final comments = snapshot.data!;
+                    //     return Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: comments.map((rating) {
+                    //         return Text('Comment: ${rating['comment']}');
+                    //       }).toList(),
+                    //     );
+                    //   },
+                    // )),
                     DataCell(
                       IconButton(
                         onPressed: () async {
@@ -297,8 +306,8 @@ class AvailableEvent extends StatelessWidget {
           Text(
             'Client Name: ${clientName ?? 'N/A'}',
             style: const TextStyle(
-              fontWeight: FontWeight.w300,
-              fontSize: 20,
+              fontWeight: FontWeight.w900,
+              fontSize: 15,
             ),
           ),
           Text(

@@ -29,8 +29,7 @@ class FeedbackPage extends StatelessWidget {
               var feedback = snapshot.data!.docs[index].data() as Map<String, dynamic>;
               var timestamp = feedback['timestamp']?.toDate();
               var message = feedback['message'];
-              var name = feedback['name'] ?? '';
-              var role = feedback['role'] ?? '';
+              var senderName = feedback['senderName'] ?? ''; // Adjusted to 'sendername'
 
               return Card(
                 margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -44,7 +43,7 @@ class FeedbackPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
+                        senderName, // Displaying sender's name
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
@@ -52,17 +51,6 @@ class FeedbackPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 4.0),
-                      Text(
-                        role,
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      const SizedBox(height: 8.0),
-                      Divider(),
-                      const SizedBox(height: 8.0),
                       Text(
                         'Feedback:',
                         style: TextStyle(
