@@ -27,14 +27,12 @@ class SearchBar extends StatelessWidget {
           hintText: 'Search logistics...',
           prefixIcon: Icon(Icons.search),
           border: InputBorder.none,
-          contentPadding:
-              EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
+          contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
         ),
       ),
     );
   }
 }
-
 
 class LogisticsPageScreen extends StatefulWidget {
   @override
@@ -44,7 +42,7 @@ class LogisticsPageScreen extends StatefulWidget {
 class _LogisticsPageScreenState extends State<LogisticsPageScreen> {
   List<LogisticsData> tempData = [];
   List<LogisticsData> filteredLogisticsData = [];
-   TextEditingController searchController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -54,8 +52,7 @@ class _LogisticsPageScreenState extends State<LogisticsPageScreen> {
 
   Future<void> fetchLogisticsData() async {
     try {
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('allocations').get();
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('allocations').get();
 
       tempData = querySnapshot.docs.map((doc) {
         print("Document data: ${doc.data()}"); // Debug log for document data
@@ -69,15 +66,14 @@ class _LogisticsPageScreenState extends State<LogisticsPageScreen> {
       setState(() {
         filteredLogisticsData = tempData;
       });
-      print(
-          "Logistics data loaded successfully"); // Debug log for successful data load
+      print("Logistics data loaded successfully"); // Debug log for successful data load
     } catch (e) {
       // Handle any errors that might occur
       print("Error fetching logistics data: $e"); // Debug log for error
     }
   }
 
-    void _searchLogisticsData(String searchText) {
+  void _searchLogisticsData(String searchText) {
     setState(() {
       filteredLogisticsData = tempData
           .where((data) =>
@@ -94,62 +90,66 @@ class _LogisticsPageScreenState extends State<LogisticsPageScreen> {
       appBar: AppBar(
         title: Text('Logistics Page'),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Card(
-            elevation: 5,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Logistics Details',
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
+      body: Container(
+        decoration: BoxDecoration(
+          color: Colors.lightBlue[50], // Set your desired background color here
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              elevation: 5,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'Logistics Details',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  SearchBar(
-                    controller: searchController,
-                    onChanged: (value) {
-                      _searchLogisticsData(value);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      headingRowColor: MaterialStateColor.resolveWith(
-                          (states) => Colors.blueGrey),
-                      columns: [
-                        DataColumn(label: Text('Event Name')),
-                        DataColumn(label: Text('Driver')),
-                        DataColumn(label: Text('Guide')),
-                      ],
-                      rows: filteredLogisticsData.map((data) {
-                        return DataRow(cells: [
-                          DataCell(Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text(data.eventName),
-                          )),
-                          DataCell(Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text(data.driver),
-                          )),
-                          DataCell(Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text(data.guide),
-                          )),
-                        ]);
-                      }).toList(),
+                    SearchBar(
+                      controller: searchController,
+                      onChanged: (value) {
+                        _searchLogisticsData(value);
+                      },
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 20),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        headingRowColor: MaterialStateColor.resolveWith((states) => Colors.blueGrey),
+                        columns: [
+                          DataColumn(label: Text('Event Name')),
+                          DataColumn(label: Text('Driver')),
+                          DataColumn(label: Text('Guide')),
+                        ],
+                        rows: filteredLogisticsData.map((data) {
+                          return DataRow(cells: [
+                            DataCell(Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(data.eventName),
+                            )),
+                            DataCell(Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(data.driver),
+                            )),
+                            DataCell(Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(data.guide),
+                            )),
+                          ]);
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

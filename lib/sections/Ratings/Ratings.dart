@@ -88,6 +88,7 @@ class _RatingPageState extends State<RatingPage> {
                           final event = Event.fromJson(eventMap);
 
                           return Card(
+                            color: Colors.lightBlue[50],
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Column(

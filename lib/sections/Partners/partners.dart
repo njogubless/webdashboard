@@ -99,51 +99,56 @@ class _PartnersPageState extends State<PartnersPage> {
           ),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SearchBar(
-              controller: searchController,
-              onChanged: (value) {
-                _searchPartnerships(value);
-              },
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                headingRowColor: MaterialStateColor.resolveWith(
-                    (states) => const Color.fromARGB(255, 64, 181, 240)),
-                columns: const [
-                  //DataColumn(label: Text(' Event ID')),
-                  DataColumn(label: Text('Event Name')),
-                  DataColumn(label: Text('Partner Name')),
-                  DataColumn(label: Text('Partner Type')),
-                  DataColumn(label: Text('Amount Offered')),
-                ],
-                rows: filteredPartnerships.map((partner) {
-                  Map<String, dynamic> partnerData =
-                      partner.data() as Map<String, dynamic>;
-                  String partnerType = partnerData['partnerType'];
-                  String amountOffered = partnerType == 'Sponsor'
-                      ? partnerData['amountOffered'] ?? 'N/A'
-                      : 'N/A'; // Show amount only for sponsors
-
-                  return DataRow(cells: [
-                    //DataCell(Text(partnerData['eventID'] ?? '')),
-                    DataCell(Text(partnerData['eventName'] ?? '')),
-                    DataCell(Text(partnerData['partnerName'] ?? '')),
-                    DataCell(Text(partnerData['partnerType'] ?? '')),
-                    DataCell(Text(amountOffered)),
-                  ]);
-                }).toList(),
+      body: Container(
+        decoration: BoxDecoration(
+          color: Colors.lightBlue[50], // Set your desired background color here
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SearchBar(
+                controller: searchController,
+                onChanged: (value) {
+                  _searchPartnerships(value);
+                },
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  headingRowColor: MaterialStateColor.resolveWith(
+                      (states) => const Color.fromARGB(255, 64, 181, 240)),
+                  columns: const [
+                    //DataColumn(label: Text(' Event ID')),
+                    DataColumn(label: Text('Event Name')),
+                    DataColumn(label: Text('Partner Name')),
+                    DataColumn(label: Text('Partner Type')),
+                    DataColumn(label: Text('Amount Offered')),
+                  ],
+                  rows: filteredPartnerships.map((partner) {
+                    Map<String, dynamic> partnerData =
+                        partner.data() as Map<String, dynamic>;
+                    String partnerType = partnerData['partnerType'];
+                    String amountOffered = partnerType == 'Sponsor'
+                        ? partnerData['amountOffered'] ?? 'N/A'
+                        : 'N/A'; // Show amount only for sponsors
+
+                    return DataRow(cells: [
+                      //DataCell(Text(partnerData['eventID'] ?? '')),
+                      DataCell(Text(partnerData['eventName'] ?? '')),
+                      DataCell(Text(partnerData['partnerName'] ?? '')),
+                      DataCell(Text(partnerData['partnerType'] ?? '')),
+                      DataCell(Text(amountOffered)),
+                    ]);
+                  }).toList(),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

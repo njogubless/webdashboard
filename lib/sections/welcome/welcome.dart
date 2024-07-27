@@ -43,7 +43,8 @@ class _WelcomeSectionState extends State<WelcomeSection> {
       appBar: AppBar(
         title: Text('HikersAfrique Admin Panel'),
       ),
-      body: Padding(
+      body: Container(
+        color: Color.fromARGB(255, 146, 199, 224), // Set your desired background color here
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,7 +165,7 @@ class InfoTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 50, color: iconColor),
-          SizedBox(height: 10),
+          SizedBox(height: 40,),
           Text(
             title,
             style: TextStyle(
@@ -173,7 +174,7 @@ class InfoTile extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 50, ),
           Text(
             stat.toString(),
             style: TextStyle(

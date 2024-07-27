@@ -92,137 +92,73 @@ class _ManageEventsState extends State<ManageEvents> {
     });
   }
 
-  // Future<List<Map<String, dynamic>>> _fetchEventRatings(String eventName) async {
-  //   print('Fetching ratings for event name: $eventName');
-  //   try {
-  //     QuerySnapshot snapshot = await FirebaseFirestore.instance
-  //         .collection('rates')
-  //         .where('eventName', isEqualTo: eventName)
-  //         .get();
-  //     if (snapshot.docs.isEmpty) {
-  //       print('No ratings found for event name: $eventName');
-  //       return [];
-  //     }
-
-  //     final ratings = snapshot.docs.map((doc) {
-  //       print('Fetched rating document: ${doc.data()}');
-  //       return doc.data() as Map<String, dynamic>;
-  //     }).toList();
-
-  //     print('Fetched ratings: $ratings');
-  //     return ratings;
-  //   } catch (e) {
-  //     print('Error fetching ratings: $e');
-  //     return [];
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 50),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Manage Events',
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 50,
-                color: Colors.indigo,
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          color: Colors.lightBlue[50], // Set your desired background color here
+        ),
+        padding: const EdgeInsets.only(top: 20, left: 50),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Manage Events',
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 50,
+                  color: Colors.indigo,
+                ),
               ),
-            ),
-            const SizedBox(height: 30),
-            SearchBar(
-              controller: searchController,
-              onChanged: (value) {
-                performSearch(value);
-              },
-            ),
-            const SizedBox(height: 30),
-            FittedBox(
-              child: DataTable(
-                columns: const [
-                  DataColumn(label: Text('Client UID')),
-                  DataColumn(label: Text('Event Name')),
-                  DataColumn(label: Text('Client Name')),
-                  DataColumn(label: Text('Client Email')),
-                  DataColumn(label: Text('Event Cost (Ksh)')),
-                  DataColumn(label: Text('Event Date')),
-                  DataColumn(label: Text('Event Time')),
-                  //DataColumn(label: Text('Rating')),
-                  //DataColumn(label: Text('Comment')),
-                  DataColumn(label: Text('Action')),
-                ],
-                rows: filteredEvents.map((event) {
-                  return DataRow(cells: [
-                    DataCell(Text(_getClientUid(event))),
-                    DataCell(Text(event.eventName)),
-                    DataCell(Text(_getClientName(event))),
-                    DataCell(Text(_getClientEmail(event))),
-                    DataCell(Text('${event.eventCost}')),
-                    DataCell(Text(event.eventDate)),
-                    DataCell(Text(event.eventTime)),
-                    // DataCell(FutureBuilder<List<Map<String, dynamic>>>(
-                    //   future: _fetchEventRatings(event.eventName),
-                    //   builder: (context, snapshot) {
-                    //     if (snapshot.connectionState == ConnectionState.waiting) {
-                    //       return const CircularProgressIndicator();
-                    //     }
-                    //     if (snapshot.hasError) {
-                    //       return const Text('Error');
-                    //     }
-                    //     if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    //       return const Text('No Ratings');
-                    //     }
-                    //     final ratings = snapshot.data!;
-                    //     return Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: ratings.map((rating) {
-                    //         return Text('Rating: ${rating['rating']}');
-                    //       }).toList(),
-                    //     );
-                    //   },
-                    // )),
-                    // DataCell(FutureBuilder<List<Map<String, dynamic>>>(
-                    //   future: _fetchEventRatings(event.eventName),
-                    //   builder: (context, snapshot) {
-                    //     if (snapshot.connectionState == ConnectionState.waiting) {
-                    //       return const CircularProgressIndicator();
-                    //     }
-                    //     if (snapshot.hasError) {
-                    //       return const Text('Error');
-                    //     }
-                    //     if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    //       return const Text('No Comments');
-                    //     }
-                    //     final comments = snapshot.data!;
-                    //     return Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: comments.map((rating) {
-                    //         return Text('Comment: ${rating['comment']}');
-                    //       }).toList(),
-                    //     );
-                    //   },
-                    // )),
-                    DataCell(
-                      IconButton(
-                        onPressed: () async {
-                          _deleteEvent(event);
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
+              const SizedBox(height: 30),
+              SearchBar(
+                controller: searchController,
+                onChanged: (value) {
+                  performSearch(value);
+                },
+              ),
+              const SizedBox(height: 30),
+              FittedBox(
+                child: DataTable(
+                  columns: const [
+                    DataColumn(label: Text('Client UID')),
+                    DataColumn(label: Text('Event Name')),
+                    DataColumn(label: Text('Client Name')),
+                    DataColumn(label: Text('Client Email')),
+                    DataColumn(label: Text('Event Cost (Ksh)')),
+                    DataColumn(label: Text('Event Date')),
+                    DataColumn(label: Text('Event Time')),
+                    DataColumn(label: Text('Action')),
+                  ],
+                  rows: filteredEvents.map((event) {
+                    return DataRow(cells: [
+                      DataCell(Text(_getClientUid(event))),
+                      DataCell(Text(event.eventName)),
+                      DataCell(Text(_getClientName(event))),
+                      DataCell(Text(_getClientEmail(event))),
+                      DataCell(Text('${event.eventCost}')),
+                      DataCell(Text(event.eventDate)),
+                      DataCell(Text(event.eventTime)),
+                      DataCell(
+                        IconButton(
+                          onPressed: () async {
+                            _deleteEvent(event);
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
                         ),
                       ),
-                    ),
-                  ]);
-                }).toList(),
+                    ]);
+                  }).toList(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

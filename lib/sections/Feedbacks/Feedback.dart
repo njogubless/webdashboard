@@ -32,6 +32,7 @@ class FeedbackPage extends StatelessWidget {
               var senderName = feedback['senderName'] ?? ''; // Adjusted to 'sendername'
 
               return Card(
+                color: Colors.lightGreen[100],
                 margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 elevation: 3.0,
                 shape: RoundedRectangleBorder(

@@ -78,74 +78,79 @@ class _BookedEventsState extends State<BookedEvents> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Padding(
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          color: Colors.lightBlue[50], // Set your desired background color here
+        ),
         padding: const EdgeInsets.only(top: 20, left: 50, right: 50),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Finance Details',
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 50,
-                color: Colors.indigo,
-              ),
-            ),
-            const SizedBox(height: 30),
-            SearchBar(
-              controller: searchController,
-              onChanged: (value) {
-                _searchPayments(value);
-              },
-            ),
-            const SizedBox(height: 30),
-            if (filteredPayments.isEmpty)
-              Center(child: Text('No matching results found'))
-            else
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  columns: [
-                    DataColumn(label: Text('UID')),
-                    DataColumn(label: Text('Client Name')),
-                    DataColumn(label: Text('Client Email')),
-                    DataColumn(label: Text('Event')),
-                    DataColumn(label: Text('M-Pesa Code')),
-                    DataColumn(label: Text('Total Cost (Ksh)')),
-                    //DataColumn(label: Text('Status')),
-                    DataColumn(label: Text('Action')),
-                  ],
-                  rows: filteredPayments.map((payment) {
-                    return DataRow(cells: [
-                       DataCell(Text(payment.id)),
-                      //DataCell(Text('${filteredPayments.indexOf(payment) + 1}')),
-                      DataCell(Text(payment.clientName)),
-                      DataCell(Text(payment.email)),
-                      DataCell(Text(payment.event)),
-                      DataCell(Text(payment.mpesaCode)),
-                      DataCell(Text('${payment.totalCost}')),
-                      //DataCell(Text(payment.status ?? 'Unknown')),
-                      DataCell(
-                        IconButton(
-                          onPressed: () {
-                            final Uri emailLaunchUri = Uri(
-                              scheme: 'mailto',
-                              path: payment.email,
-                              query: encodeQueryParameters({'subject': 'RE: ${payment.event}'}),
-                            );
-                            launchUrl(emailLaunchUri);
-                          },
-                          icon: const Icon(Icons.email, color: Colors.blue),
-                        ),
-                      ),
-                    ]);
-                  }).toList(),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Finance Details',
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 50,
+                  color: Colors.indigo,
                 ),
               ),
-          ],
+              const SizedBox(height: 30),
+              SearchBar(
+                controller: searchController,
+                onChanged: (value) {
+                  _searchPayments(value);
+                },
+              ),
+              const SizedBox(height: 30),
+              if (filteredPayments.isEmpty)
+                Center(child: Text('No matching results found'))
+              else
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    columns: [
+                      DataColumn(label: Text('UID')),
+                      DataColumn(label: Text('Client Name')),
+                      DataColumn(label: Text('Client Email')),
+                      DataColumn(label: Text('Event')),
+                      DataColumn(label: Text('M-Pesa Code')),
+                      DataColumn(label: Text('Total Cost (Ksh)')),
+                      //DataColumn(label: Text('Status')),
+                      DataColumn(label: Text('Action')),
+                    ],
+                    rows: filteredPayments.map((payment) {
+                      return DataRow(cells: [
+                        DataCell(Text(payment.id)),
+                        //DataCell(Text('${filteredPayments.indexOf(payment) + 1}')),
+                        DataCell(Text(payment.clientName)),
+                        DataCell(Text(payment.email)),
+                        DataCell(Text(payment.event)),
+                        DataCell(Text(payment.mpesaCode)),
+                        DataCell(Text('${payment.totalCost}')),
+                        //DataCell(Text(payment.status ?? 'Unknown')),
+                        DataCell(
+                          IconButton(
+                            onPressed: () {
+                              final Uri emailLaunchUri = Uri(
+                                scheme: 'mailto',
+                                path: payment.email,
+                                query: encodeQueryParameters({'subject': 'RE: ${payment.event}'}),
+                              );
+                              launchUrl(emailLaunchUri);
+                            },
+                            icon: const Icon(Icons.email, color: Colors.blue),
+                          ),
+                        ),
+                      ]);
+                    }).toList(),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
