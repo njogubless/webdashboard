@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hikers_dash/sections/welcome/info_tile.dart';
 import 'package:hikers_dash/services/database.dart';
 import 'package:hikers_dash/services/models/client.dart';
-
 
 class WelcomeSection extends StatefulWidget {
   const WelcomeSection({
@@ -17,16 +15,12 @@ class WelcomeSection extends StatefulWidget {
 }
 
 class _WelcomeSectionState extends State<WelcomeSection> {
-  //late TextEditingController _searchController;
   late List<Client> _clients;
-  //late List<Client> _filteredClients;
 
   @override
   void initState() {
     super.initState();
-    //_searchController = TextEditingController();
     _clients = [];
-    //_filteredClients = [];
     _loadData();
   }
 
@@ -35,22 +29,11 @@ class _WelcomeSectionState extends State<WelcomeSection> {
 
     setState(() {
       _clients = clients;
-      //_filteredClients = clients;
     });
   }
 
-  // void _performSearch(String query) {
-  //   setState(() {
-  //     _filteredClients = _clients
-  //         .where((client) =>
-  //             client.clientName.toLowerCase().contains(query.toLowerCase()))
-  //         .toList();
-  //   });
-  // }
-
   @override
   void dispose() {
-    //_searchController.dispose();
     super.dispose();
   }
 
@@ -65,49 +48,14 @@ class _WelcomeSectionState extends State<WelcomeSection> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Welcome to HikersAfrique Admin Panel',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 30,
-                    color: Colors.indigo,
-                  ),
-                ),
-                // Row(
-                //   children: [
-                //     Icon(Icons.search),
-                //     SizedBox(width: 10),
-                //     SearchBar(
-                //       controller: _searchController,
-                //       onChanged: (value) {
-                //         _performSearch(value);
-                //       },
-                //     ),
-                //   ],
-                // ),
-              ],
+            Text(
+              'Welcome to HikersAfrique Admin Panel',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 28,
+                color: Colors.indigo,
+              ),
             ),
-            // SizedBox(height: 20),
-            // // Display search results
-            // if (_searchController.text.isNotEmpty)
-            //   Expanded(
-            //     child: ListView.builder(
-            //       itemCount: _filteredClients.length,
-            //       itemBuilder: (context, index) {
-            //         var client = _filteredClients[index];
-            //         var name = client.clientName;
-
-            //         return ListTile(
-            //           title: Text('USER: ${name}'),
-            //           subtitle: Text(
-            //               'Status: ${client.status},Role: ${client.role}'),
-            //         );
-            //       },
-            //     ),
-            //   ),
             SizedBox(height: 20),
             // Other widgets below
             Row(
@@ -120,6 +68,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                       .length,
                   icon: Icons.person,
                   iconColor: Colors.white,
+                  backgroundColor: Colors.deepPurpleAccent,
                 ),
                 SizedBox(width: 10),
                 InfoTile(
@@ -129,6 +78,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                       .length,
                   icon: Icons.person_outline,
                   iconColor: Colors.white,
+                  backgroundColor: Colors.deepOrangeAccent,
                 ),
               ],
             ),
@@ -147,6 +97,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                         stat: events,
                         icon: Icons.event,
                         iconColor: Colors.white,
+                        backgroundColor: Colors.blueAccent,
                       );
                     },
                   ),
@@ -163,6 +114,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                         stat: income,
                         icon: Icons.attach_money,
                         iconColor: Colors.white,
+                        backgroundColor: Colors.greenAccent,
                       );
                     },
                   ),
@@ -171,6 +123,66 @@ class _WelcomeSectionState extends State<WelcomeSection> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class InfoTile extends StatelessWidget {
+  final String title;
+  final int stat;
+  final IconData icon;
+  final Color iconColor;
+  final Color backgroundColor;
+
+  const InfoTile({
+    Key? key,
+    required this.title,
+    required this.stat,
+    required this.icon,
+    required this.iconColor,
+    required this.backgroundColor,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 3,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 50, color: iconColor),
+          SizedBox(height: 10),
+          Text(
+            title,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 10),
+          Text(
+            stat.toString(),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }
